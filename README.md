@@ -11,4 +11,12 @@ This project is the basis for the DbWS (Develop by Wire System) which pretends t
 		-Start the IDE
 		-Show the status of the Docker containers
 		-Etc ...
-	
+
+
+
+
+Future Lines of Work:
+	Integrate this project with the iworkin project
+	Integrate with Dragonfire
+		https://medium.com/@hkdb/siri-alternative-for-ubuntu-a6bc6825b9ad
+		http://dragon.computer/
