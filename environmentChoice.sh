@@ -44,8 +44,9 @@ echo "${rc}-${ans}"
 
 
 ECLIPSE_PATH=/home/francisco/eclipse/java-photon/eclipse
-UNISCON_ECLIPSE_WORKSPACE=/home/francisco/eclipse-workspace
-PERSONAL_ECLIPSE_WORKSPACE=/home/francisco/francisco-workspace
+UNISCON_ECLIPSE_WORKSPACE=/home/francisco/workspaces/uniscon
+PERSONAL_ECLIPSE_WORKSPACE=/home/francisco/workspaces/personal-projects
+BAELDUNG_ECLIPSE_WORKSPACE=/home/francisco/workspaces/baeldung
 
 LEFT_UPPER_CORNER_XPS13=110x24+86+110
 RIGHT_UPPER_CORNER_XPS13=80x24+1180+110
