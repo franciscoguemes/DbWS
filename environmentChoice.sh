@@ -80,7 +80,8 @@ function startOption1 {
 	CONTAINER_NAME=BAC-15
 	#Open terminals in differnt possitions in XPS13
 	gnome-terminal --geometry $LEFT_UPPER_CORNER_XPS13 --working-directory=~ -- /bin/bash -c "set-title Docker Images; sudo docker images; /bin/bash" & 	
-	gnome-terminal --geometry $RIGHT_UPPER_CORNER_XPS13 --working-directory=~ -- /bin/bash -c "set-title $CONTAINER_NAME; sudo docker start -ai $CONTAINER_NAME; /bin/bash " &
+	#gnome-terminal --geometry $RIGHT_UPPER_CORNER_XPS13 --working-directory=~ -- /bin/bash -c "set-title $CONTAINER_NAME; sudo docker start -ai $CONTAINER_NAME; /bin/bash " &
+	gnome-terminal --geometry $RIGHT_UPPER_CORNER_XPS13 --working-directory=~ -- /bin/bash -c "set-title Docker Container" &
 	gnome-terminal --geometry $LEFT_DOWN_CORNER_XPS13 --working-directory=~ -- /bin/bash -c "set-title Docker Containers; sudo docker ps -a; /bin/bash " & 
 	gnome-terminal --geometry $RIGHT_DOWN_CORNER_XPS13 &
 
