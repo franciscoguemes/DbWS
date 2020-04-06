@@ -27,7 +27,7 @@
 
 
 option1="Work at Uniscon"
-option2="Work in personal projects"
+option2="Work in AEGIS project"
 option3="Other projects"
 
 ans=$(zenity --info --title 'Welcome Francisco!' \
@@ -42,11 +42,10 @@ ans=$(zenity --info --title 'Welcome Francisco!' \
 #echo $answer
 echo "${rc}-${ans}"
 
-
 ECLIPSE_PATH=/home/francisco/eclipse/java-photon/eclipse
-UNISCON_ECLIPSE_WORKSPACE=/home/francisco/workspaces/uniscon
-PERSONAL_ECLIPSE_WORKSPACE=/home/francisco/workspaces/personal-projects
-BAELDUNG_ECLIPSE_WORKSPACE=/home/francisco/workspaces/baeldung
+ECLIPSE_UNISCON_WORKSPACE=/home/francisco/workspaces/uniscon
+ECLIPSE_PERSONAL_WORKSPACE=/home/francisco/workspaces/personal-projects
+ECLIPSE_BAELDUNG_WORKSPACE=/home/francisco/workspaces/baeldung
 
 LEFT_UPPER_CORNER_XPS13=110x24+86+110
 RIGHT_UPPER_CORNER_XPS13=80x24+1180+110
@@ -54,6 +53,10 @@ LEFT_DOWN_CORNER_XPS13=80x24+86+610
 RIGHT_DOWN_CORNER_XPS13=80x24+1180+610
 
 THIRD_MONITOR_LEFT_UPPER_CORNER_XPS=3900,0
+
+
+CHROME_BOOKMARKS_APP_DIR=/home/francisco/git/Francisco/github/chrome_bookmarks
+CHROME_BOOKMARKS_APP_CONFIG_FILE=/home/francisco/conf/chrome_bookmarks/chrome_bookmarks.conf
 
 CHROMIUM_PROFILE_FRANCISCO=Default
 CHROMIUM_PROFILE_UNISCON=Profile\ 1
@@ -72,7 +75,7 @@ function startOption1 {
 	echo "Starting Uniscon environment..."
 
 	#Start eclipse...
-	$ECLIPSE_PATH/eclipse -data $UNISCON_ECLIPSE_WORKSPACE &
+	$ECLIPSE_PATH/eclipse -data $ECLIPSE_UNISCON_WORKSPACE &
 
 	#Start docker container idgard_6275...
 	#gnome-terminal -- sudo docker start -ai idgard_6275
@@ -81,9 +84,10 @@ function startOption1 {
 	#Open terminals in differnt possitions in XPS13
 	gnome-terminal --geometry $LEFT_UPPER_CORNER_XPS13 --working-directory=~ -- /bin/bash -c "set-title Docker Images; sudo docker images; /bin/bash" & 	
 	#gnome-terminal --geometry $RIGHT_UPPER_CORNER_XPS13 --working-directory=~ -- /bin/bash -c "set-title $CONTAINER_NAME; sudo docker start -ai $CONTAINER_NAME; /bin/bash " &
-	gnome-terminal --geometry $RIGHT_UPPER_CORNER_XPS13 --working-directory=~ -- /bin/bash -c "set-title Docker Container" &
+	#gnome-terminal --geometry $RIGHT_UPPER_CORNER_XPS13 --working-directory=~ -- /bin/bash &
+	gnome-terminal --geometry $RIGHT_UPPER_CORNER_XPS13 --working-directory=~ -- /bin/bash -c "set-title Containers; exec /bin/bash"
 	gnome-terminal --geometry $LEFT_DOWN_CORNER_XPS13 --working-directory=~ -- /bin/bash -c "set-title Docker Containers; sudo docker ps -a; /bin/bash " & 
-	gnome-terminal --geometry $RIGHT_DOWN_CORNER_XPS13 &
+	gnome-terminal --geometry $RIGHT_DOWN_CORNER_XPS13 --working-directory=~ -- /bin/bash &
 
 	#Start Chrome...
 	chromium --window-position=$THIRD_MONITOR_LEFT_UPPER_CORNER_XPS --profile-directory="$CHROMIUM_PROFILE_UNISCON" --new-window \
@@ -106,28 +110,58 @@ function startOption1 {
 	sleep 5
 
 	#Start slack...
-	slack
+	#slack
+
+	#Start Zoho Cliq
+	cliq
 
 }
 
+function open_bookmarks {
+	# echo "$1"
+	# echo  `pwd`
+	url_list=$($CHROME_BOOKMARKS_APP_DIR/chrome_bookmarks.py --config=$CHROME_BOOKMARKS_APP_CONFIG_FILE "$1")
+	# Remove characters not needed from Python list
+	url_list=$(echo "$url_list" | tr -d [],\')
+	# echo $url_list
+
+	for i in "${url_list[@]}"
+	do
+    	#echo "$i"
+		chromium --window-position=$THIRD_MONITOR_LEFT_UPPER_CORNER_XPS --profile-directory=$CHROMIUM_PROFILE_FRANCISCO --new-window \
+		$i  \ &	
+	done
+}
+
 function startOption2 {
-	echo "Starting Personal environment..."
+	echo "Starting AEGIS environment..."
 
 	#Start eclipse...
-	$ECLIPSE_PATH/eclipse -data $PERSONAL_ECLIPSE_WORKSPACE &
+	$ECLIPSE_PATH/eclipse -data $ECLIPSE_PERSONAL_WORKSPACE &
 
-	#Start Chrome...
-	chromium --window-position=$THIRD_MONITOR_LEFT_UPPER_CORNER_XPS --profile-directory=$CHROMIUM_PROFILE_FRANCISCO --new-window \
-		$GMAIL \
-		$EVERNOTE \
-		$LEO \
-		$WORDREFERENCE &
+	#Start Chrome... 
+	# chromium --window-position=$THIRD_MONITOR_LEFT_UPPER_CORNER_XPS --profile-directory=$CHROMIUM_PROFILE_FRANCISCO --new-window \
+	# 	$GMAIL \
+	# 	$EVERNOTE \
+	# 	$LEO \
+	# 	$WORDREFERENCE &
 
-	#Doing whatever...
+
+	# Bookmarks/Personal/Login Screen
+	# /home/francisco/git/Francisco/github/chrome_bookmarks/chrome_bookmarks.py --config=/home/francisco/conf/chrome_bookmarks/chrome_bookmarks.conf /Personal/"Login screen"
+	open_bookmarks /Personal/"Login screen"
+
+	#Wait 5 seconds...
+	sleep 5
 }
 
 function startOption3 {
 	echo "Initializing Other..."
+	# echo  `pwd`
+	# git/Francisco/github/chrome_bookmarks/chrome_bookmarks.py --config=/home/francisco/conf/chrome_bookmarks/chrome_bookmarks.conf /Personal/"Start new Spring Boot project"
+
+	#open_bookmarks /Personal/"Login screen"
+
 }
 
 case "$rc" in
