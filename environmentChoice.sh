@@ -71,7 +71,43 @@ UNISCON_GITLAB=https://gitlab.uniscon-rnd.de/users/sign_in
 LEO=https://dict.leo.org/spanisch-deutsch
 WORDREFERENCE=http://www.wordreference.com/es/en/translation.asp
 
-function startOption1 {
+
+function work_in_uniscon_as_product_owner {
+	echo "Starting Uniscon environment..."
+
+	#Start Chrome...
+	chromium --window-position=$THIRD_MONITOR_LEFT_UPPER_CORNER_XPS --profile-directory="$CHROMIUM_PROFILE_UNISCON" --new-window \
+		$EVERNOTE \
+		$UNISCON_OUTLOOK \
+		$IDGARD \
+		$UNISCON_CONFLUENCE \
+		$UNISCON_JIRA \
+		$UNISCON_GITLAB \
+		$LEO \
+		$WORDREFERENCE &
+
+	#Wait 5 seconds...
+	sleep 5
+
+	chromium --window-position=$THIRD_MONITOR_LEFT_UPPER_CORNER_XPS --profile-directory=$CHROMIUM_PROFILE_FRANCISCO --new-window \
+		$GMAIL \ &	
+
+	#Wait 5 seconds...
+	sleep 5
+
+	#Start slack...
+	#slack
+
+	#Start Zoho Cliq
+	cliq
+}
+
+
+
+#
+# This funciton comes from the old days when I was a developer and the entire environment was initialized magically...
+#
+function work_in_uniscon_as_developer {
 	echo "Starting Uniscon environment..."
 
 	#Start eclipse...
@@ -114,7 +150,13 @@ function startOption1 {
 
 	#Start Zoho Cliq
 	cliq
+}
 
+function startOption1 {
+	# I used to be a developer...
+	#work_in_uniscon_as_developer
+
+	work_in_uniscon_as_product_owner
 }
 
 function open_bookmarks {
