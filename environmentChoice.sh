@@ -68,7 +68,8 @@ IDGARD=https://my.idgard.de/#/login
 AHA=https://uniscon.aha.io/products/SP/strategic_imperatives
 UNISCON_CONFLUENCE=https://confluence.uniscon-rnd.de/display/BAC/Backoffice
 UNISCON_JIRA=https://jira.uniscon-rnd.de/browse/PM-33
-UNISCON_GITLAB=https://gitlab.uniscon-rnd.de/users/sign_in
+OLD_UNISCON_GITLAB=https://gitlab.uniscon-rnd.de/users/sign_in
+UNISCON_GITLAB=https://gitlab.com/uniscon/sp/backlog
 LEO=https://dict.leo.org/spanisch-deutsch
 WORDREFERENCE=http://www.wordreference.com/es/en/translation.asp
 
@@ -84,6 +85,7 @@ function work_in_uniscon_as_product_owner {
 		$AHA \
 		$UNISCON_CONFLUENCE \
 		$UNISCON_JIRA \
+		$OLD_UNISCON_GITLAB \
 		$UNISCON_GITLAB \
 		$LEO \
 		$WORDREFERENCE &
@@ -134,6 +136,7 @@ function work_in_uniscon_as_developer {
 		$IDGARD \
 		$UNISCON_CONFLUENCE \
 		$UNISCON_JIRA \
+		$OLD_UNISCON_GITLAB \
 		$UNISCON_GITLAB \
 		$LEO \
 		$WORDREFERENCE &
