@@ -1,0 +1,44 @@
+TODO:
+    Define "Context" format
+    Generate a Tkinter UI on the fly based on the "Contexts" (Dummy)
+    Make the UI to work
+    Think about the different Workflows:
+        The computer starts and the user decides on what to work (Usual case scenario)
+        The user is working in a Context and decides to start working in a different Context
+            Store the last Context you were working in
+            Offer the option of closing the Context
+            Offer the option to switch to another Context
+            See when was the last reboot:
+                https://unix.stackexchange.com/questions/131775/how-long-has-my-linux-system-been-running
+
+
+Future Functionality to add to contexts:
+	Recognise the Network you are connected at
+		i.e. Start the VPN when I am connected at home and I work at Uniscon
+		    https://askubuntu.com/questions/57339/connect-disconnect-from-vpn-from-the-command-line
+		i.e. Start the VPN when I am connected anywhere outside of the office and I work at Uniscon
+		i.e. Do NOT start the VPN when I am at the office
+		
+
+Contexts to create:
+
+	Create an option work in my Website:
+		Open the Hosting page
+		Open VS Code with the website project
+		Open Filezilla
+		Open the browser showing the page in desktop
+		Open the browser showing the page in mobile
+		Docker container with the Apache web server + PHP installed ???
+
+    Create an option work in my MDWiki:
+		Open a terminal in the directory of the project
+		Open VS Code with the wiki project
+		Open the Hosting page
+		Open the Manage packet in the hosting area
+		Open the browser showing the wiki in the hosting (the real one)
+		Start the python_web_server in the directory of the MDWiki project in local
+		Open the browser showing the wiki in the local environment
+
+
+
+/******************************************************************************************************************************************************/
