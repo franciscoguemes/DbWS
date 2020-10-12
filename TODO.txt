@@ -11,14 +11,7 @@ TODO:
             See when was the last reboot:
                 https://unix.stackexchange.com/questions/131775/how-long-has-my-linux-system-been-running
 
-
-Future Functionality to add to contexts:
-	Recognise the Network you are connected at
-		i.e. Start the VPN when I am connected at home and I work at Uniscon
-		    https://askubuntu.com/questions/57339/connect-disconnect-from-vpn-from-the-command-line
-		i.e. Start the VPN when I am connected anywhere outside of the office and I work at Uniscon
-		i.e. Do NOT start the VPN when I am at the office
-		
+/**********************************************************************************************************************/
 
 Contexts to create:
 
@@ -39,6 +32,13 @@ Contexts to create:
 		Start the python_web_server in the directory of the MDWiki project in local
 		Open the browser showing the wiki in the local environment
 
+/**********************************************************************************************************************/
+
+Future Functionality to add to contexts:
+	Recognise the Network you are connected at
+		i.e. Start the VPN when I am connected at home and I work at Uniscon
+		    https://askubuntu.com/questions/57339/connect-disconnect-from-vpn-from-the-command-line
+		i.e. Start the VPN when I am connected anywhere outside of the office and I work at Uniscon
+		i.e. Do NOT start the VPN when I am at the office
 
 
-/******************************************************************************************************************************************************/
