@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import sys
+from json import JSONDecodeError
 from pathlib import Path
 import configparser
 
@@ -32,7 +33,13 @@ def main():
     #       You need to substitute the defined variables in the configuration file...
     #       Some profiles of Chromium have scaped double quotes in the Context definition because
     #       the quotes are needed for the command line
-    parser = JsonParser(contexts_file)
+    try:
+        parser = JsonParser(contexts_file)
+        contexts = parser.get_all_contexts()
+        for context in contexts:
+            print(context.get_name())
+    except JSONDecodeError as e:
+        print(e)
     # try:
     #     bookmarks = parser.get_all_bookmarks_in_folder(bookmark_folder)
     #     print(bookmarks)
