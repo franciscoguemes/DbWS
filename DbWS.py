@@ -4,14 +4,24 @@ import sys
 from pathlib import Path
 import configparser
 
+from jsonparser.JsonParser import JsonParser
+
 DEFAULT_CONFIG_FILE = "DbWS.conf"
 DEFAULT_CONFIG_DIR = "/home/francisco/.config/DbWS"
+
+CONFIG_KEY_LOCAL = "LOCAL"
+CONFIG_KEY_CONTEXTS_FILES = "CONTEXTS_FILE"
+
 
 def main():
     print("Parse arguments...")
     # TODO: Parse arguments
+
     print("Load configuration...")
-    load_configuration()
+    config = load_configuration()
+    contexts_file = config[CONFIG_KEY_LOCAL][CONFIG_KEY_CONTEXTS_FILES]
+    print(contexts_file)
+
     print("Parse Contexts...")
     # TODO: Parse contexts
     # http://commons.apache.org/proper/commons-cli/
@@ -20,8 +30,17 @@ def main():
     #       POSIX --> Do not need to add any characters
     #   When building up the entire command from the parsed JSON remember that:
     #       You need to substitute the defined variables in the configuration file...
-    #       Some profiles of Chromium have scaped double quotes in the Context definition because the quotes are needed for the command line
+    #       Some profiles of Chromium have scaped double quotes in the Context definition because
+    #       the quotes are needed for the command line
+    parser = JsonParser(contexts_file)
+    # try:
+    #     bookmarks = parser.get_all_bookmarks_in_folder(bookmark_folder)
+    #     print(bookmarks)
+    # except InvalidBookmarkFolderException as e:
+    #     print(e)
+
     print("Show initial window...")
+
 
 def load_configuration():
 
@@ -40,10 +59,19 @@ def load_configuration():
         raise FileNotFoundError(msg)
 
     config = configparser.ConfigParser()
+    # Preserves the case sensitive in the parser...
+    config.optionxform = str
     config.read(cfile.absolute())
+    # print_configuration(config)
     check_config(config)
+    return config
 
-    #chrome_bookmarks_file = config['LOCAL']['CHROME_BOOKMARKS_FILE']
+
+def print_configuration(config):
+    for key in config:
+        print(key)
+        for inner_key in config[key]:
+            print(f"\t{inner_key}")
 
 
 def check_config(config):
@@ -52,8 +80,9 @@ def check_config(config):
         msg += """Please have a look at the documentation of the project and edit the config file in the pertinent way.
         More info about config files on: https://docs.python.org/3/library/configparser.html
         """
-        sys.exit(msg)
-    #TODO: Check the rest of the configuration parameters here...
+        raise Exception(msg)
+        # sys.exit(msg)
+    # TODO: Check the rest of the configuration parameters here...
 
 
 if __name__ == "__main__":
