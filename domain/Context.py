@@ -11,4 +11,6 @@ class Context:
         self.__applications = applications
 
     def get_name(self):
-        return  self.__name
+        return self.__name
+
+

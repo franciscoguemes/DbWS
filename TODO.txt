@@ -1,5 +1,6 @@
 TODO:
-    Define "Context" format
+    Define "Context" JSON schema
+    Validate "Context" file against JSON schema
     Generate a Tkinter UI on the fly based on the "Contexts" (Dummy)
     Make the UI to work
     Think about the different Workflows:
