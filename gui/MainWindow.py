@@ -1,4 +1,4 @@
-from tkinter import Frame
+from tkinter import Frame, Label, TOP, BOTTOM, CENTER, LEFT, Button
 
 from gui.WindowBuilder import WindowBuilder
 
@@ -7,10 +7,10 @@ class MainWindow(Frame):
 
     def __init__(self, master, contexts):
         self.__master = master
-        self.__builder = WindowBuilder(contexts)
+        self.__builder = WindowBuilder(self, contexts)
         Frame.__init__(self, master, height=self.__builder.get_height(), width=self.__builder.get_width())
         self.__center_on_screen()
-        #self.__add_components()
+        self.__add_components()
 
     def __center_on_screen(self):
 
@@ -26,3 +26,32 @@ class MainWindow(Frame):
         # Positions the window in the center of the page.
         self.__master.geometry("+{}+{}".format(position_right, position_down))
 
+    def __add_components(self):
+        top_frame = Frame(self)
+        label = Label(top_frame, text="¿What do you want to do today?")
+        label.pack(side=LEFT)
+        top_frame.pack()
+
+        bottom_frame = Frame(self)
+        rows = self.__builder.get_rows()
+        columns = self.__builder.get_columns()
+
+        for row in range(rows):
+            for column in range(columns):
+                button = self.__add_button(bottom_frame, row,column)
+        bottom_frame.pack()
+
+    def __add_button(self, frame, row, column):
+
+        context = self.__builder.get_context(row, column)
+
+        button = Button(frame, text=context.get_name(), command=lambda: self.__switch_context(context))
+        button.grid(row=row, column=column, pady=20, padx=20)
+
+    def __switch_context(self, context):
+        context.switch()
+
+        # Close the window...
+        self.destroy()
+        self.__master.update()
+        self.__master.destroy()

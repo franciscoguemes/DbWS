@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import subprocess
+import tkinter.messagebox
 
 
 class Context:
@@ -13,4 +15,9 @@ class Context:
     def get_name(self):
         return self.__name
 
+    def switch(self):
+        # tkinter.messagebox.showinfo(title="Executing context...", message=f"{self.__name}")
+
+        for application in self.__applications:
+            application.execute()
 

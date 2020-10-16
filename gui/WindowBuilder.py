@@ -1,11 +1,12 @@
-
+from tkinter import Button
 
 
 class WindowBuilder:
     DEFAULT_HEIGHT = 200
     DEFAULT_WIDTH = 200
 
-    def __init__(self, contexts):
+    def __init__(self, main_window, contexts):
+        self.__main_window = main_window
         self.__contexts = contexts
         self.__num = len(contexts)
         self.__rows, self.__columns = self.__calculate_geometry()
@@ -46,3 +47,21 @@ class WindowBuilder:
     def get_width(self):
         return self.__columns * WindowBuilder.DEFAULT_WIDTH
 
+    def get_columns(self):
+        return self.__columns
+
+    def get_rows(self):
+        return self.__rows
+
+    # def add_button(self, frame, row, column):
+    #
+    #     context = self.__contexts[self.__get_context_index(row, column)]
+    #
+    #     button = Button(frame, text=context.get_name(), command=lambda: context.switch(self.__main_window))
+    #     button.grid(row=row, column=column, pady=20, padx=20)
+
+    def get_context(self, row, column):
+        return self.__contexts[self.__get_context_index(row, column)]
+
+    def __get_context_index(self, row, column):
+        return row * self.get_columns() + column
