@@ -7,6 +7,8 @@ import configparser
 from time import sleep
 
 from jsonparser.JsonParser import JsonParser
+from tkinter import Tk, PhotoImage
+from gui.MainWindow import MainWindow
 
 DEFAULT_CONFIG_FILE = "DbWS.conf"
 DEFAULT_CONFIG_DIR = "/home/francisco/.config/DbWS"
@@ -45,6 +47,14 @@ def main():
             print(context.get_name())
 
         print("Show initial window...")
+        root = Tk()
+        # icon = PhotoImage(file="resources/webserver.png")
+        # root.iconphoto(True, icon)
+        root.title("DbWS")
+        root.resizable(0, 0)
+        main_window = MainWindow(root, contexts)
+        main_window.pack()
+        root.mainloop()
 
     except JSONDecodeError as e:
         print(e)
