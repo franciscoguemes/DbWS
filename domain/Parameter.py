@@ -21,6 +21,13 @@ class RealParameter(Parameter):
 
     def get_value(self):
         return self.__value
+        # if " " in self.__value:
+        #     # return "'" + self.__value + "'"
+        #     value = self.__value.replace(" ", "\\ ")
+        #     value = value.replace("\"", "")
+        #     return "\"" + value + "\""
+        # else:
+        #     return self.__value
 
 
 class CallToApplication(Parameter):
@@ -37,4 +44,19 @@ class CallToApplication(Parameter):
         self.__application = application
 
     def get_value(self):
-        return self.__application.get_result()
+        result = self.__application.get_result_as_string()
+        result = result.strip()
+        if result[0:2] == "['" and result[-2:] == "']":  # The string represents an array of strings...
+            result = self.__transform_string_to_array_of_strings(result)
+            # print(result)
+        return result
+
+    def __transform_string_to_array_of_strings(self, result):
+        array_of_strings = []
+        result = result[1:-1]  # Delete the first and last character...
+        urls = result.split(", ")
+        for url in urls:
+            array_of_strings.append(url[1:-1])
+        # return " ".join(array_of_strings)
+        return array_of_strings
+

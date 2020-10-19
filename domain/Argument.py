@@ -22,17 +22,15 @@ class Argument:
             raise ValueError(msg)
 
     def as_string(self):
-        argument = None
+        argument = self.__argument
         if self.__value:
-            if type == self.TYPE_GNU:
-                argument = self.__argument + "=" + self.__value
+            if self.__type == self.TYPE_GNU:
+                argument += "=" + self.__value
             elif self.__type == self.TYPE_POSIX:
-                argument = self.__argument + " " + self.__value
+                argument += " " + self.__value
             else:  # It should not enter here since there is only those types of arguments
                 # TODO: Throw an error here
                 pass
-        else:  # There is no value so it does not matter the type of argument...
-            argument = self.__argument
 
         return argument
 
