@@ -36,9 +36,14 @@ class MainWindow(Frame):
         rows = self.__builder.get_rows()
         columns = self.__builder.get_columns()
 
+        counter = 0
         for row in range(rows):
             for column in range(columns):
-                button = self.__add_button(bottom_frame, row,column)
+                if counter < self.__builder.get_contexts_len():
+                    button = self.__add_button(bottom_frame, row, column)
+                    counter+=1
+                else:
+                    break
         bottom_frame.pack()
 
     def __add_button(self, frame, row, column):
@@ -47,6 +52,7 @@ class MainWindow(Frame):
 
         button = Button(frame, text=context.get_name(), command=lambda: self.__switch_context(context))
         button.grid(row=row, column=column, pady=20, padx=20)
+        return button
 
     def __switch_context(self, context):
         context.switch()

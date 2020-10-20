@@ -53,6 +53,9 @@ class WindowBuilder:
     def get_rows(self):
         return self.__rows
 
+    def get_contexts_len(self):
+        return len(self.__contexts)
+
     # def add_button(self, frame, row, column):
     #
     #     context = self.__contexts[self.__get_context_index(row, column)]
@@ -65,3 +68,4 @@ class WindowBuilder:
 
     def __get_context_index(self, row, column):
         return row * self.get_columns() + column
+
