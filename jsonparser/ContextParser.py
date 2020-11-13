@@ -33,18 +33,19 @@ class ContextParser(JsonReader):
 
         schema_version = data.get("schema_version")
         if schema_version:
-            return schema_versions
+            return schema_version
         else:
-            raise InvalidContextFileError(f"The given contexts file:'{super().get_file()}' does not contain the attribute "
-                             f"'schema_version' and therefore is an invalid file")
+            raise InvalidContextFileError(f"The given contexts file:'{super().get_file()}' does not contain the "
+                                          f"attribute 'schema_version' and therefore is an invalid file")
 
     def get_all_contexts(self):
         data = self.read_all_data()
 
-        # print(data[0])
+        json_contexts = data["contexts"]
+        # print(json_contexts)
 
         contexts = []
-        for json_context in data:
+        for json_context in json_contexts:
             context = self.parse_context(json_context)
             contexts.append(context)
 

@@ -11,11 +11,10 @@ from jsonschema import ValidationError
 
 from error import InvalidContextFileError
 from error.InvalidContextFileError import InvalidContextFileError
-from jsonparser.ContextParser import ContextParser
-from jsonparser.JsonParser import JsonParser
 from tkinter import Tk, PhotoImage
 from gui.MainWindow import MainWindow
 from jsonparser.JsonReader import JsonReader
+from jsonparser.ContextParser import ContextParser
 
 DEFAULT_CONFIG_FILE = "DbWS.conf"
 DEFAULT_CONFIG_DIR = "/home/francisco/.config/DbWS"
@@ -58,8 +57,8 @@ def main():
         # print(context_json_data)
         # print(schema_json_data)
         jsonschema.validate(context_json_data, schema_json_data)
-        print("It validates correctly...")
-        exit()
+        # print("It validates correctly...")
+
 
         print("Parse Contexts...")
         # TODO: Parse contexts
