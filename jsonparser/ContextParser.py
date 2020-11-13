@@ -5,9 +5,9 @@ from json import JSONDecodeError
 from string import Template
 
 from domain.Application import Application
-from domain.Argument import Argument
+from domain.Argument import RealArgument, CallToApplicationArgument
 from domain.Context import Context
-from domain.Parameter import RealParameter, CallToApplication
+from domain.Parameter import RealParameter, CallToApplicationParameter
 from error.InvalidContextFileError import InvalidContextFileError
 from jsonparser.JsonReader import JsonReader
 
@@ -21,7 +21,7 @@ class ContextParser(JsonReader):
     def __init__(self, json_file, interpolation_dict=None):
         super().__init__(json_file)
         self.__interpolation_dict = interpolation_dict
-        self.__json_data=None
+        self.__json_data = None
 
     def get_schema_version(self):
         """
@@ -97,22 +97,37 @@ class ContextParser(JsonReader):
     def parse_argument(self, argument_json):
         arg = None
         arg_type = argument_json["type"]
-        argument = argument_json["argument"]
-        value = argument_json.get("value")
+        argument = self.__interpolate(argument_json["argument"])
+        json_value = argument_json.get("value")
+        # print(type(json_value))
 
-        if value:
-            value = self.__interpolate(value)
-            arg = Argument(arg_type, argument, value)
+        if json_value:
+            if self.__is_an_application_call(json_value):
+                arg = CallToApplicationArgument(arg_type, argument, self.parse_application(json_value))
+                # raise NotImplementedError()
+            else:
+                json_value = self.__interpolate(json_value)
+                arg = RealArgument(arg_type, argument, json_value)
         else:
-            arg = Argument(arg_type, argument)
+            arg = RealArgument(arg_type, argument)
 
         return arg
 
+    def __is_an_application_call(self, json_value):
+        # print(json_value)
+        # print(type(json_value))
+
+        if isinstance(json_value, dict):
+            path = json_value.get("path")
+            if path:
+                return True
+
+        return False
+
     def parse_parameter(self, parameter_json):
         parameter = None
-        path = parameter_json.get("path")
-        if path:  # Then it is a CallToParameter ...
-            parameter = CallToApplication(self.parse_application(parameter_json))
+        if self.__is_an_application_call(parameter_json):  # Then it is a CallToParameter ...
+            parameter = CallToApplicationParameter(self.parse_application(parameter_json))
         else:  # Normal parameter
             parameter = RealParameter(parameter_json["value"])
         return parameter

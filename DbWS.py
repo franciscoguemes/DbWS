@@ -46,7 +46,7 @@ def main():
         # print(contexts_file)
 
         print("Validate against schema...")
-        context_parser = ContextParser(contexts_file, get_config_section_as_dictionary(config,CONFIG_KEY_ENVIRONMENT))
+        context_parser = ContextParser(contexts_file, get_config_section_as_dictionary(config, CONFIG_KEY_ENVIRONMENT))
         schema_version = context_parser.get_schema_version()
 
         schema_file = get_schema_file(schema_version)
@@ -137,7 +137,7 @@ def check_config(config):
 
 def get_config_section_as_dictionary(config, section_key):
     """
-    Given a ConfigParser and a Section key, it returns a dictionary
+    Given a configuration and a Section key, it returns a dictionary
     :param section:
     :return:
     :see: https://gist.github.com/amitsaha/3065184

@@ -5,9 +5,9 @@ from json import JSONDecodeError
 from string import Template
 
 from domain.Application import Application
-from domain.Argument import Argument
+from domain.Argument import RealArgument
 from domain.Context import Context
-from domain.Parameter import RealParameter, CallToApplication
+from domain.Parameter import RealParameter, CallToApplicationParameter
 from error.InvalidContextFileError import InvalidContextFileError
 
 
