@@ -9,38 +9,37 @@ from domain.Argument import Argument
 from domain.Context import Context
 from domain.Parameter import RealParameter, CallToApplication
 from error.InvalidContextFileError import InvalidContextFileError
+from jsonparser.JsonReader import JsonReader
 
 
-class JsonParser:
-    """ A JSON parser for the Contexts file.
+class ContextParser(JsonReader):
+    """
+    A JSON parser for the Contexts file.
+    This class contains specific functionality to parse the context files.
     """
 
-    PATH_SEPARATOR = "/"
-
-    def __init__(self, contexts_file, interpolation_dict=None):
-        self.__contexts_file = contexts_file
+    def __init__(self, json_file, interpolation_dict=None):
+        super().__init__(json_file)
         self.__interpolation_dict = interpolation_dict
         self.__json_data=None
 
-    def get_all_data(self):
-        if self.__json_data is None:
-            with open(self.__contexts_file) as f:
-                self.__json_data = json.load(f)
-
-        return self.__json_data
-
     def get_schema_version(self):
-        data = self.get_all_data()
+        """
+        The method search for the property "schema_version" in the root of the JSON document.
+        If the property exists it returns the value if not it throws an InvalidContextFileError
+        :return: The version of the schema used in the document.
+        """
+        data = super().read_all_data()
 
         schema_version = data.get("schema_version")
         if schema_version:
-            return schema_version
+            return schema_versions
         else:
-            raise InvalidContextFileError(f"The given contexts file:'{self.__contexts_file}' does not contain the attribute "
+            raise InvalidContextFileError(f"The given contexts file:'{super().get_file()}' does not contain the attribute "
                              f"'schema_version' and therefore is an invalid file")
 
     def get_all_contexts(self):
-        data = self.get_all_data()
+        data = self.read_all_data()
 
         # print(data[0])
 

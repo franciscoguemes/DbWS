@@ -11,9 +11,11 @@ from jsonschema import ValidationError
 
 from error import InvalidContextFileError
 from error.InvalidContextFileError import InvalidContextFileError
+from jsonparser.ContextParser import ContextParser
 from jsonparser.JsonParser import JsonParser
 from tkinter import Tk, PhotoImage
 from gui.MainWindow import MainWindow
+from jsonparser.JsonReader import JsonReader
 
 DEFAULT_CONFIG_FILE = "DbWS.conf"
 DEFAULT_CONFIG_DIR = "/home/francisco/.config/DbWS"
@@ -44,15 +46,20 @@ def main():
         contexts_file = config[CONFIG_KEY_LOCAL][CONFIG_KEY_CONTEXTS_FILES]
         # print(contexts_file)
 
-        print("Validate Schema...")
-        parser = JsonParser(contexts_file, get_config_section_as_dictionary(config,CONFIG_KEY_ENVIRONMENT))
-        schema_version = parser.get_schema_version()
-        schema_file = get_schema_file(schema_version)
-        json_data = parser.get_all_data()
-        print(schema_file)
-        print(json_data)
-        jsonschema.validate(json_data, schema_file)
+        print("Validate against schema...")
+        context_parser = ContextParser(contexts_file, get_config_section_as_dictionary(config,CONFIG_KEY_ENVIRONMENT))
+        schema_version = context_parser.get_schema_version()
 
+        schema_file = get_schema_file(schema_version)
+        json_reader = JsonReader(schema_file)
+        schema_json_data = json_reader.read_all_data()
+
+        context_json_data = context_parser.read_all_data()
+        # print(context_json_data)
+        # print(schema_json_data)
+        jsonschema.validate(context_json_data, schema_json_data)
+        print("It validates correctly...")
+        exit()
 
         print("Parse Contexts...")
         # TODO: Parse contexts
@@ -64,9 +71,7 @@ def main():
         #       You need to substitute the defined variables in the configuration file...
         #       Some profiles of Chromium have scaped double quotes in the Context definition because
         #       the quotes are needed for the command line
-
-        parser = JsonParser(contexts_file, get_config_section_as_dictionary(config,CONFIG_KEY_ENVIRONMENT))
-        contexts = parser.get_all_contexts()
+        contexts = context_parser.get_all_contexts()
         for context in contexts:
             print(context.get_name())
 

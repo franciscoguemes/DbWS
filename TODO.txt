@@ -1,8 +1,12 @@
 TODO:
     Define "Context" JSON schema
     Validate "Context" file against JSON schema
+        https://json-schema.org/understanding-json-schema/reference/numeric.html#number
         https://www.jsonschemavalidator.net/
         https://jsoneditoronline.org/#left=local.guqefa&right=local.kowije
+        https://github.com/Julian/jsonschema/issues/260
+        https://stackoverflow.com/questions/63735271/do-we-have-a-concept-of-checked-and-unchecked-exceptions-in-python
+        https://stackoverflow.com/questions/1319615/proper-way-to-declare-custom-exceptions-in-modern-python
 
     Think about the different Workflows:
         The computer starts and the user decides on what to work (Usual case scenario)
