@@ -1,11 +1,16 @@
 #!/usr/bin/python3
-
+import os
 import sys
 from json import JSONDecodeError
 from pathlib import Path
 import configparser
 from time import sleep
 
+import jsonschema
+from jsonschema import ValidationError
+
+from error import InvalidContextFileError
+from error.InvalidContextFileError import InvalidContextFileError
 from jsonparser.JsonParser import JsonParser
 from tkinter import Tk, PhotoImage
 from gui.MainWindow import MainWindow
@@ -17,6 +22,15 @@ CONFIG_KEY_LOCAL = "LOCAL"
 CONFIG_KEY_CONTEXTS_FILES = "CONTEXTS_FILE"
 CONFIG_KEY_ENVIRONMENT = "ENVIRONMENT"
 
+SCHEMA_ROOT_NAME = "DbWS_context_schema_"
+JSON_EXTENSION = ".json"
+SCHEMA_DIRECTORY = "schemas"
+
+
+def get_schema_file(schema_version):
+    schema_file_name = SCHEMA_ROOT_NAME + str(schema_version) + JSON_EXTENSION
+    schema_file = SCHEMA_DIRECTORY + os.path.sep + schema_file_name
+    return schema_file
 
 def main():
     try:
@@ -29,6 +43,16 @@ def main():
         config = load_configuration()
         contexts_file = config[CONFIG_KEY_LOCAL][CONFIG_KEY_CONTEXTS_FILES]
         # print(contexts_file)
+
+        print("Validate Schema...")
+        parser = JsonParser(contexts_file, get_config_section_as_dictionary(config,CONFIG_KEY_ENVIRONMENT))
+        schema_version = parser.get_schema_version()
+        schema_file = get_schema_file(schema_version)
+        json_data = parser.get_all_data()
+        print(schema_file)
+        print(json_data)
+        jsonschema.validate(json_data, schema_file)
+
 
         print("Parse Contexts...")
         # TODO: Parse contexts
@@ -48,7 +72,7 @@ def main():
 
         print("Show initial window...")
         root = Tk()
-        # icon = PhotoImage(file="resources/webserver.png")
+        # icon = PhotoImage(file="schemas/webserver.png")
         # root.iconphoto(True, icon)
         root.title("DbWS")
         root.resizable(0, 0)
@@ -57,6 +81,10 @@ def main():
         root.mainloop()
 
     except JSONDecodeError as e:
+        print(e)
+    except InvalidContextFileError as e:
+        print(e)
+    except ValidationError as e:
         print(e)
 
 

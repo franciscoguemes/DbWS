@@ -8,6 +8,7 @@ from domain.Application import Application
 from domain.Argument import Argument
 from domain.Context import Context
 from domain.Parameter import RealParameter, CallToApplication
+from error.InvalidContextFileError import InvalidContextFileError
 
 
 class JsonParser:
@@ -19,12 +20,29 @@ class JsonParser:
     def __init__(self, contexts_file, interpolation_dict=None):
         self.__contexts_file = contexts_file
         self.__interpolation_dict = interpolation_dict
+        self.__json_data=None
+
+    def get_all_data(self):
+        if self.__json_data is None:
+            with open(self.__contexts_file) as f:
+                self.__json_data = json.load(f)
+
+        return self.__json_data
+
+    def get_schema_version(self):
+        data = self.get_all_data()
+
+        schema_version = data.get("schema_version")
+        if schema_version:
+            return schema_version
+        else:
+            raise InvalidContextFileError(f"The given contexts file:'{self.__contexts_file}' does not contain the attribute "
+                             f"'schema_version' and therefore is an invalid file")
 
     def get_all_contexts(self):
-        with open(self.__contexts_file) as f:
-            data = json.load(f)
+        data = self.get_all_data()
 
-        #print(data[0])
+        # print(data[0])
 
         contexts = []
         for json_context in data:
@@ -112,4 +130,3 @@ class JsonParser:
         template = Template(non_interpolated_value)
         interpolated_value = template.substitute(self.__interpolation_dict)
         return interpolated_value
-
