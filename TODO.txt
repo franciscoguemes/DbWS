@@ -2,7 +2,7 @@ TODO:
 
     Allow the Argument to be a call to an Application
         The application call can be in the "value" attribute of the argument
-        The application call can be the entire argument definition.
+        The application call can be the entire argument definition --> Modify the JSON schema
 
         The application can return
             a single string ("value" attribute as application call)
