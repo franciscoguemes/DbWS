@@ -1,0 +1,134 @@
+{
+  "$schema": "http://json-schema.org/draft/2019-09/schema#",
+  "definitions": {
+    "parameter": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "parameters": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/parameter"
+          },
+          {
+            "$ref": "#/definitions/application"
+          }
+        ]
+      },
+      "uniqueItems": true,
+      "default": []
+    },
+    "argument": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "POSIX",
+            "GNU"
+          ]
+        },
+        "argument": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "argument"
+      ]
+    },
+    "arguments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/argument"
+      },
+      "uniqueItems": true,
+      "default": []
+    },
+    "application": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "arguments": {
+          "$ref": "#/definitions/arguments"
+        },
+        "parameters": {
+          "$ref": "#/definitions/parameters"
+        }
+      },
+      "required": [
+        "name",
+        "path"
+      ]
+    },
+    "applications": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/application"
+      },
+      "default": []
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "applications": {
+          "$ref": "#/definitions/applications"
+        }
+      }
+    },
+    "contexts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/context"
+      },
+      "uniqueItems": true,
+      "default": []
+    }
+  },
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "number"
+    },
+    "creator": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    },
+    "contexts": {
+      "$ref": "#/definitions/contexts"
+    }
+  },
+  "required": [
+    "schema_version",
+    "contexts"
+  ]
+}
