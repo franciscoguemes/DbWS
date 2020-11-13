@@ -1,8 +1,9 @@
 TODO:
     Define "Context" JSON schema
     Validate "Context" file against JSON schema
-    Generate a Tkinter UI on the fly based on the "Contexts" (Dummy)
-    Make the UI to work
+        https://www.jsonschemavalidator.net/
+        https://jsoneditoronline.org/#left=local.guqefa&right=local.kowije
+
     Think about the different Workflows:
         The computer starts and the user decides on what to work (Usual case scenario)
         The user is working in a Context and decides to start working in a different Context
