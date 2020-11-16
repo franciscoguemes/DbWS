@@ -5,7 +5,7 @@ from json import JSONDecodeError
 from string import Template
 
 from domain.Application import Application
-from domain.Argument import RealArgument, CallToApplicationArgument
+from domain.Argument import RealArgument, CallToApplicationArgumentValue, CallToApplicationArgument
 from domain.Context import Context
 from domain.Parameter import RealParameter, CallToApplicationParameter
 from error.InvalidContextFileError import InvalidContextFileError
@@ -96,20 +96,21 @@ class ContextParser(JsonReader):
 
     def parse_argument(self, argument_json):
         arg = None
-        arg_type = argument_json["type"]
-        argument = self.__interpolate(argument_json["argument"])
-        json_value = argument_json.get("value")
-        # print(type(json_value))
-
-        if json_value:
-            if self.__is_an_application_call(json_value):
-                arg = CallToApplicationArgument(arg_type, argument, self.parse_application(json_value))
-                # raise NotImplementedError()
+        if self.__is_an_application_call(argument_json):
+            arg = CallToApplicationArgument(self.parse_application(argument_json))
+        else: # Is either a 100% defined argument or an argument with a call in the value
+            arg_type = argument_json["type"]
+            argument = self.__interpolate(argument_json["argument"])
+            json_value = argument_json.get("value")
+            # print(type(json_value))
+            if json_value:
+                if self.__is_an_application_call(json_value):
+                    arg = CallToApplicationArgumentValue(arg_type, argument, self.parse_application(json_value))
+                else:
+                    json_value = self.__interpolate(json_value)
+                    arg = RealArgument(arg_type, argument, json_value)
             else:
-                json_value = self.__interpolate(json_value)
-                arg = RealArgument(arg_type, argument, json_value)
-        else:
-            arg = RealArgument(arg_type, argument)
+                arg = RealArgument(arg_type, argument)
 
         return arg
 

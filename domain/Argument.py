@@ -48,6 +48,7 @@ class RealArgument(Argument):
         self.__value = value
 
     def as_string(self):
+        raise NotImplementedError("This should return an array of strings...")
         return self.build_argument(self.__argument, self.__value, self.__type)
         # argument = self.__argument
         # if self.__value:
@@ -61,12 +62,16 @@ class RealArgument(Argument):
         # return argument
 
 
-class CallToApplicationArgument(Argument):
+class CallToApplicationArgumentValue(Argument):
     """
-    If we would translate the CallToApplication argument as pure JSON, the result would be an string that would
-    contain:
-    "argument = value" (In case of GNU)
-    "argument value" (In case of POSIX)
+    The argument is calculated as a combination of processing the paramters "type" and "argument" plus calling
+    to an external application represented by the last paramter "application".
+
+    The result of a CallToApplicationArgumentValue is an array of strings in the following way:
+    GNU   --->  ["argument=value"]
+    POSIX --->  ["argument", "value"]
+
+    In order to calculate the "value" of both expressions it is necessary to call to an external application.
     """
 
     def __init__(self, type, argument, application):
@@ -76,8 +81,7 @@ class CallToApplicationArgument(Argument):
         self.__application = application
 
     def as_string(self):
-        argument = self.__argument
-
+        raise NotImplementedError("This should return an array of strings...")
         application_result = self.__application.get_result_as_string()
         application_result = application_result.strip()
         if application_result[0:2] == "['" and application_result[
@@ -97,3 +101,32 @@ class CallToApplicationArgument(Argument):
         #         raise ValueError(f"Only types: '{self.TYPE_GNU}' and '{self.TYPE_POSIX}' are allowed!")
         #
         # return argument
+
+
+class CallToApplicationArgument(Argument):
+    """
+    The entire argument is the result of calling to an external application.
+    The result of a CallToApplicationArgument is an array of strings that simply represents the results of the
+    application. In this case the user has the entire responsibility of providing an external application call
+    whose result is a valid (or a sequence of valid) GNU or POSIX argument(s) for the given command. The following
+    outcome examples are handled gracefully by the application:
+    GNU   --->  ["argument=value"]
+    GNU   --->  ["argument1=value1", "argument2=value2", ..., "argumentN=valueN"]
+    POSIX --->  ["argument", "value"]
+    POSIX --->  ["argument1", "value1", "argument2", "value2", ..., "argumentN", "valueN"]
+    """
+
+    def __init__(self, application):
+        self.__application = application
+
+    def as_string(self):
+        raise NotImplementedError("This should return an array of strings...")
+        application_result = self.__application.get_result_as_string()
+        application_result = application_result.strip()
+        if application_result[0:2] == "['" and application_result[
+                                               -2:] == "']":  # The string represents an array of strings...
+            raise ValueError("The result of the application must be a single value not an array of values")
+            # result = self.__transform_string_to_array_of_strings(result)
+            # print(result)
+
+        return application_result
