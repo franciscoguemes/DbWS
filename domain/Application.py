@@ -38,13 +38,16 @@ class Application:
     def get_full_command(self):
         """
         Returns the command as an array of strings. I.e ["ls", "-a", -"l", "-h"]
-        :return: An array of strings that represents the command the options and the arguments
+        :return: An array of strings that represents the command the arguments (options and values (if needed) and
+        the parameters (if any)
         """
         command = [self.__path]
         if self.__arguments:
             for argument in self.__arguments:
                 # print(argument.as_string())
-                command.append(argument.as_string())
+                arg_array = argument.as_string_array()
+                for arg in arg_array:
+                    command.append(arg)
 
         if self.__parameters:
             for parameter in self.__parameters:

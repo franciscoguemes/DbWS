@@ -2,6 +2,8 @@
 
 from abc import ABC, abstractmethod
 
+from domain.Context import transform_string_to_array_of_strings, the_string_is_empty
+
 
 class Argument(ABC):
     """
@@ -14,25 +16,43 @@ class Argument(ABC):
     TYPE_POSIX = "POSIX"
 
     @staticmethod
-    def check_type(type):
-        if type != RealArgument.TYPE_GNU and type != RealArgument.TYPE_POSIX:
-            msg = f"The given value for the argument type: \"{type}\" is invalid"
+    def the_string_represents_an_array_of_strings(string_to_test):
+        """
+        Tells whether the given string represents an string array or not. I.e:
+        string_to_test = "" # False
+        string_to_test = "''" # False
+        string_to_test = "foo" # False
+        string_to_test = "'foo', 'and', 'foo'" # False
+        string_to_test = "[]" # True
+        string_to_test = "['']" # True
+        string_to_test = "['string1', 'string2', ... ,'stringN']" # True
+
+        :param string_to_test: The string to check.
+        :return: True if the given string represents an array of strings otherwise False.
+        """
+        return (string_to_test[0:2] == "['" and string_to_test[-2:] == "']") or (len(string_to_test) == 2 and string_to_test == "[]")
+
+    @staticmethod
+    def check_type(arg_type):
+        if arg_type != RealArgument.TYPE_GNU and arg_type != RealArgument.TYPE_POSIX:
+            msg = f"The given value for the argument type: \"{arg_type}\" is invalid"
             raise ValueError(msg)
 
     @staticmethod
     def build_argument(argument, value, arg_type):
-        build_arg = argument
+        build_arg = []
         if value:
             if arg_type == Argument.TYPE_GNU:
-                build_arg += "=" + value
+                build_arg.append(argument + "=" + value)
             elif arg_type == Argument.TYPE_POSIX:
-                build_arg += " " + value
+                build_arg.append(argument)
+                build_arg.append(value)
             else:  # It should not enter here since there is only those types of arguments
                 raise ValueError(f"Only types: '{Argument.TYPE_GNU}' and '{Argument.TYPE_POSIX}' are allowed!")
         return build_arg
 
     @abstractmethod
-    def as_string(self):
+    def as_string_array(self):
         pass
 
 
@@ -41,25 +61,15 @@ class RealArgument(Argument):
     The Argument class. This class represents an argument that is used when executing a command.
     """
 
-    def __init__(self, type, argument, value=None):
-        self.check_type(type)
-        self.__type = type
+    def __init__(self, arg_type, argument, value=None):
+        self.check_type(arg_type)
+        self.__type = arg_type
         self.__argument = argument
         self.__value = value
 
-    def as_string(self):
+    def as_string_array(self):
         raise NotImplementedError("This should return an array of strings...")
         return self.build_argument(self.__argument, self.__value, self.__type)
-        # argument = self.__argument
-        # if self.__value:
-        #     if self.__type == self.TYPE_GNU:
-        #         argument += "=" + self.__value
-        #     elif self.__type == self.TYPE_POSIX:
-        #         argument += " " + self.__value
-        #     else:  # It should not enter here since there is only those types of arguments
-        #         raise ValueError(f"Only types: '{self.TYPE_GNU}' and '{self.TYPE_POSIX}' are allowed!")
-        #
-        # return argument
 
 
 class CallToApplicationArgumentValue(Argument):
@@ -74,33 +84,25 @@ class CallToApplicationArgumentValue(Argument):
     In order to calculate the "value" of both expressions it is necessary to call to an external application.
     """
 
-    def __init__(self, type, argument, application):
-        self.check_type(type)
-        self.__type = type
+    def __init__(self, arg_type, argument, application):
+        self.check_type(arg_type)
+        self.__type = arg_type
         self.__argument = argument
         self.__application = application
 
-    def as_string(self):
-        raise NotImplementedError("This should return an array of strings...")
+    def as_string_array(self):
         application_result = self.__application.get_result_as_string()
         application_result = application_result.strip()
-        if application_result[0:2] == "['" and application_result[
-                                               -2:] == "']":  # The string represents an array of strings...
-            raise ValueError("The result of the application must be a single value not an array of values")
-            # result = self.__transform_string_to_array_of_strings(result)
-            # print(result)
+        if the_string_is_empty(application_result):
+            raise ValueError("The result of the application can not be empty!!!")
+
+        if self.the_string_represents_an_array_of_strings(application_result):
+            raise ValueError("The result of the application must be a single value. "
+                             "It can not be an array of values. Otherwise replace the entire argument definition by"
+                             "an application call definition and ensure the application returns a valid argument for"
+                             "the given parent application")
 
         return self.build_argument(self.__argument, application_result, self.__type)
-
-        # if result:
-        #     if self.__type == self.TYPE_GNU:
-        #         argument += "=" + result
-        #     elif self.__type == self.TYPE_POSIX:
-        #         argument += " " + result
-        #     else:  # It should not enter here since there is only those types of arguments
-        #         raise ValueError(f"Only types: '{self.TYPE_GNU}' and '{self.TYPE_POSIX}' are allowed!")
-        #
-        # return argument
 
 
 class CallToApplicationArgument(Argument):
@@ -119,14 +121,16 @@ class CallToApplicationArgument(Argument):
     def __init__(self, application):
         self.__application = application
 
-    def as_string(self):
-        raise NotImplementedError("This should return an array of strings...")
+    def as_string_array(self):
         application_result = self.__application.get_result_as_string()
         application_result = application_result.strip()
-        if application_result[0:2] == "['" and application_result[
-                                               -2:] == "']":  # The string represents an array of strings...
-            raise ValueError("The result of the application must be a single value not an array of values")
-            # result = self.__transform_string_to_array_of_strings(result)
-            # print(result)
+        if the_string_is_empty(application_result):
+            raise ValueError("The result of the application can not be empty!!!")
+
+        if self.the_string_represents_an_array_of_strings(application_result):
+            application_result = transform_string_to_array_of_strings(application_result)
+            print(application_result)
+        else:  # The string is a single string, so wrap it into an array
+            application_result = [application_result]
 
         return application_result
