@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import logging
 from abc import ABC, abstractmethod
 
 from domain.Context import transform_string_to_array_of_strings, the_string_is_empty
@@ -41,14 +41,26 @@ class Argument(ABC):
     @staticmethod
     def build_argument(argument, value, arg_type):
         build_arg = []
-        if value:
-            if arg_type == Argument.TYPE_GNU:
+        if arg_type == Argument.TYPE_GNU:
+            if value:
                 build_arg.append(argument + "=" + value)
-            elif arg_type == Argument.TYPE_POSIX:
-                build_arg.append(argument)
+            else:
+                raise ValueError(f"For a: '{Argument.TYPE_GNU}' argument type the value can not be \"None\" or empty")
+        elif arg_type == Argument.TYPE_POSIX:
+            build_arg.append(argument)
+            if value:
                 build_arg.append(value)
-            else:  # It should not enter here since there is only those types of arguments
-                raise ValueError(f"Only types: '{Argument.TYPE_GNU}' and '{Argument.TYPE_POSIX}' are allowed!")
+        else:  # It should not enter here since there is only those types of arguments
+            raise ValueError(f"Only types: '{Argument.TYPE_GNU}' and '{Argument.TYPE_POSIX}' are allowed!")
+
+        # if value:
+        #     if arg_type == Argument.TYPE_GNU:
+        #         build_arg.append(argument + "=" + value)
+        #     elif arg_type == Argument.TYPE_POSIX:
+        #         build_arg.append(argument)
+        #         build_arg.append(value)
+        #     else:  # It should not enter here since there is only those types of arguments
+        #         raise ValueError(f"Only types: '{Argument.TYPE_GNU}' and '{Argument.TYPE_POSIX}' are allowed!")
         return build_arg
 
     @abstractmethod
@@ -68,7 +80,7 @@ class RealArgument(Argument):
         self.__value = value
 
     def as_string_array(self):
-        raise NotImplementedError("This should return an array of strings...")
+        # raise NotImplementedError("This should return an array of strings...")
         return self.build_argument(self.__argument, self.__value, self.__type)
 
 
@@ -123,13 +135,19 @@ class CallToApplicationArgument(Argument):
 
     def as_string_array(self):
         application_result = self.__application.get_result_as_string()
+        # logging.debug(application_result)
+        # if isinstance(application_result, str):
+        #     logging.debug("Is a string")
+        # elif isinstance(application_result, dict):
+        #     logging.debug("Is a dictionary")
+        # else:
+        #     logging.debug("I do not know what is it")
         application_result = application_result.strip()
         if the_string_is_empty(application_result):
             raise ValueError("The result of the application can not be empty!!!")
 
         if self.the_string_represents_an_array_of_strings(application_result):
             application_result = transform_string_to_array_of_strings(application_result)
-            print(application_result)
         else:  # The string is a single string, so wrap it into an array
             application_result = [application_result]
 

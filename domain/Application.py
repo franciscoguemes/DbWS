@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import logging
 import subprocess
 
 
@@ -17,19 +18,27 @@ class Application:
         return self.__name
 
     def get_result_as_string(self):
-        print(f"On get_result() method application={self.__name}")
+        logging.debug(f"On get_result_as_string() method application={self.__name}")
         full_command = self.get_full_command()
-        print(full_command)
-        application = subprocess.run(full_command, stdout=subprocess.PIPE)
-        result = application.stdout.decode("utf-8")
-        # print(result)
-        # print(type(result))
+        logging.debug(f"full_command: {full_command}")
+
+        application = subprocess.Popen(full_command, stdout=subprocess.PIPE)
+        application.wait()
+        result = application.communicate()[0]
+        logging.debug(f"result: {result}")
+        result = result.decode("utf-8")
         return result
+        #
+        # application = subprocess.run(full_command, stdout=subprocess.PIPE)
+        # result = application.stdout.decode("utf-8")
+        # # print(result)
+        # # print(type(result))
+        # return result
 
     def execute(self):
-        print(f"On execute() method application={self.__name}")
+        logging.debug(f"On execute() method application={self.__name}")
         full_command = self.get_full_command()
-        print(full_command)
+        logging.debug(full_command)
         # list_files = subprocess.run(full_command)
         # print("The exit code was: %d" % list_files.returncode)
 

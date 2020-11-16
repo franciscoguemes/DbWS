@@ -1,3 +1,4 @@
+import tkinter
 from tkinter import Frame, Label, TOP, BOTTOM, CENTER, LEFT, Button
 
 from gui.WindowBuilder import WindowBuilder
@@ -17,7 +18,7 @@ class MainWindow(Frame):
         # Gets the requested values of the height and widht.
         window_width = self.__master.winfo_reqwidth()
         window_height = self.__master.winfo_reqheight()
-        print("Width", window_width, "Height", window_height)
+        # print("Width", window_width, "Height", window_height)
 
         # Gets both half the screen width/height and window width/height
         position_right = int(self.__master.winfo_screenwidth() / 2 - window_width / 2)
@@ -55,6 +56,7 @@ class MainWindow(Frame):
         return button
 
     def __switch_context(self, context):
+        print(f"Executing context: \"{context.get_name()}\"")
         context.switch()
 
         # Close the window...

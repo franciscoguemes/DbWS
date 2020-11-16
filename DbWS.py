@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import logging
 import os
 import sys
 from json import JSONDecodeError
@@ -34,18 +35,20 @@ def get_schema_file(schema_version):
     return schema_file
 
 def main():
+    logging.basicConfig(level=logging.DEBUG)
+
     try:
-        print("Parse arguments...")
+        logging.info("Parse arguments...")
         # TODO: Parse arguments
         # DbWS --config=/path/to/my/config_file
         # if no arguments are supplied then the application will take the config from .config/DbWS/DbWS.conf
 
-        print("Load configuration...")
+        logging.info("Load configuration...")
         config = load_configuration()
         contexts_file = config[CONFIG_KEY_LOCAL][CONFIG_KEY_CONTEXTS_FILES]
         # print(contexts_file)
 
-        print("Validate against schema...")
+        logging.info("Validate against schema...")
         context_parser = ContextParser(contexts_file, get_config_section_as_dictionary(config, CONFIG_KEY_ENVIRONMENT))
         schema_version = context_parser.get_schema_version()
 
@@ -60,7 +63,7 @@ def main():
         # print("It validates correctly...")
 
 
-        print("Parse Contexts...")
+        logging.info("Parse Contexts...")
         # TODO: Parse contexts
         # http://commons.apache.org/proper/commons-cli/
         #   When parsing context arguments remember that:
@@ -71,10 +74,10 @@ def main():
         #       Some profiles of Chromium have scaped double quotes in the Context definition because
         #       the quotes are needed for the command line
         contexts = context_parser.get_all_contexts()
-        for context in contexts:
-            print(context.get_name())
+        # for context in contexts:
+        #     print(context.get_name())
 
-        print("Show initial window...")
+        logging.info("Show initial window...")
         root = Tk()
         # icon = PhotoImage(file="schemas/webserver.png")
         # root.iconphoto(True, icon)

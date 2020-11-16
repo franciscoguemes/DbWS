@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import json
+import logging
 from json import JSONDecodeError
 from string import Template
 
@@ -95,21 +96,26 @@ class ContextParser(JsonReader):
         return application
 
     def parse_argument(self, argument_json):
+        logging.debug(f"Parsing argument: {argument_json}")
         arg = None
         if self.__is_an_application_call(argument_json):
+            logging.debug("Is a CallToApplicationArgument")
             arg = CallToApplicationArgument(self.parse_application(argument_json))
-        else: # Is either a 100% defined argument or an argument with a call in the value
+        else:  # Is either a 100% defined argument or an argument with a call in the value
             arg_type = argument_json["type"]
             argument = self.__interpolate(argument_json["argument"])
             json_value = argument_json.get("value")
             # print(type(json_value))
             if json_value:
                 if self.__is_an_application_call(json_value):
+                    logging.debug("Is a CallToApplicationArgumentValue")
                     arg = CallToApplicationArgumentValue(arg_type, argument, self.parse_application(json_value))
                 else:
+                    logging.debug("Is a RealArgument")
                     json_value = self.__interpolate(json_value)
                     arg = RealArgument(arg_type, argument, json_value)
             else:
+                logging.debug("Is a RealArgument")
                 arg = RealArgument(arg_type, argument)
 
         return arg
@@ -126,11 +132,15 @@ class ContextParser(JsonReader):
         return False
 
     def parse_parameter(self, parameter_json):
+        logging.debug(f"Parsing parameter: {parameter_json}")
         parameter = None
         if self.__is_an_application_call(parameter_json):  # Then it is a CallToParameter ...
+            logging.debug("Is a CallToApplicationParameter")
             parameter = CallToApplicationParameter(self.parse_application(parameter_json))
         else:  # Normal parameter
-            parameter = RealParameter(parameter_json["value"])
+            logging.debug("Is a RealParameter")
+            value = self.__interpolate(parameter_json["value"])
+            parameter = RealParameter(value)
         return parameter
 
     def __interpolate(self, non_interpolated_value):
@@ -141,6 +151,9 @@ class ContextParser(JsonReader):
 
         # print(non_interpolated_value)
         if self.__interpolation_dict is None:
+            return non_interpolated_value
+
+        if not isinstance(non_interpolated_value, str):
             return non_interpolated_value
 
         template = Template(non_interpolated_value)
