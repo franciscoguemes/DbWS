@@ -147,8 +147,17 @@ class CallToApplicationArgument(Argument):
             raise ValueError("The result of the application can not be empty!!!")
 
         if self.the_string_represents_an_array_of_strings(application_result):
+            # logging.debug(f"The string represents an array of strings: {application_result}")
             application_result = transform_string_to_array_of_strings(application_result)
         else:  # The string is a single string, so wrap it into an array
-            application_result = [application_result]
+            # logging.debug(f"The string represents a single string: {application_result}")
+
+            # Is the string a multiline string (contains at least one character '\n') ?
+            # https://stackoverflow.com/questions/24237524/how-to-split-a-python-string-on-new-line-characters
+            multiple_lines = list(filter(bool, application_result.splitlines()))
+            if len(multiple_lines) > 1:
+                application_result = map(lambda x: x.strip(), multiple_lines)
+            else:
+                application_result = [application_result]
 
         return application_result
