@@ -1,5 +1,7 @@
 TODO:
 
+    Review the README.md and explain the Context and all the possibilities for the Application call.
+
     Allow the Argument to be a call to an Application
         The application call can be in the "value" attribute of the argument --> One single value
             GNU or POSIX
@@ -17,7 +19,6 @@ TODO:
                                     N GNU arguments
 
 
-
     Define "Context" JSON schema
     Validate "Context" file against JSON schema
         https://json-schema.org/understanding-json-schema/reference/numeric.html#number
@@ -29,6 +30,11 @@ TODO:
 
     Improve the logging:
         https://docs.python.org/3.6/howto/logging.html
+        if no logging configuration file is supplied
+            Establish a default logging configuration
+        else
+            Read the logging configuration from a file
+
 
     Think about the different Workflows:
         The computer starts and the user decides on what to work (Usual case scenario)
