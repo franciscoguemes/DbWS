@@ -52,8 +52,11 @@
 #Documentation
 
 ## README.md
+1. Explain the Context definition in the CONTEXT.md file. Do not forget to mention the JSON
+   schema versions.
 1. After the "Usage" section create a section explaining how to execute DBwS automatically
 after login in the OS.
+1. Create a file with the takeaways of the project.
 
 
 #Future functionality
