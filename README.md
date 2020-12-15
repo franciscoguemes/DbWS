@@ -27,7 +27,7 @@ easily, just by saying to the DbWS that he wants to change to the other project.
 ## What is a context?
 A "Context" is what a user can 
 conceptually do i.e. A user may work in Project X, then working in "Project X" may be 
-considered a Context. For the user to work in "Project X" (That specific context) 
+considered a Context. For the user to work in "Project X" (That is an specific context) 
 the system will have to open a series of applications (i.e. Eclipse IDE, the browser, 
 etc ...) each of this applications with a specific configuration (i.e. Eclipse IDE with 
 the Workspace _A_ and the Working Set _W_, the browser may need to be logged as an 
@@ -37,7 +37,7 @@ configuration is what is known as a Context.
 ## Changing contexts
 
 When a user is working in multiple projects (i.e. Working at a company and also in his 
-free time working in some different personal projects (i.e. Building a personal site, 
+free time being involved in some different personal projects (i.e. A personal site, 
 or contributing to an open source app)) simultaneously one of the things that creates 
 a bigger mental fatigue is to switch between Contexts. Open all the required apps with 
 the desired configuration. Just to setup the environment for start working may take a 
@@ -47,7 +47,8 @@ smoothly from one context to another and focus on what really creates value for 
 
 ## What does DbWS in reality?
 This project is the basis for the DbWS (Develop by Wire System) which pretends to 
-automatize all routinary tasks that as a developer I carry out every day such as:
+automatize all routinary tasks that I personally carry out every day as a developer.
+Some of this tasks are:
 
 - Select the computer set up on startup. Choose whether you will be working in a:
 	- Company project
@@ -64,83 +65,46 @@ task, this may include:
 	- Show the status of the Docker containers
 	- Etc ...
 
+## Installation
+You simply need to download the project to your local computer. 
+
+## Configuration
+In order to configure DbWS you will need to create a configuration file so please have a look 
+to the file [CONFIG_FILE.md](https://github.com/franciscoguemes/DbWS/blob/master/CONFIG_FILE.md).
+
+Once you have created your configuration file, your next step will be to define the different 
+contexts you will be using. For this purpose, please have a look to the file 
+[CONTEXT.md](https://github.com/franciscoguemes/DbWS/blob/master/CONFIG_FILE.md).
 
 
-# TODO:
-1. Define exactly what is a Context and which attributes will have the context --> JSON or XML ???
-2. Define different Contexts based on 1.
-3. Make the UI of the app to generate automatically based on the supplied set of contexts ...
-4. Be able to open the different apps with the desired configurations.
-5. Integrate the concept of Context with the project _iworkin_ --> _iworkin_ can be 
-seen as just another application more to execute when the user switch to that context.
-	
+## Usage
+Execute in a terminal the command _DbWS_ as in the example below.
+```bash
+# Usin the default configuration file:  ~/.config/DbWS/DbWS.conf 
+# You are supposed to create the file
+DbWS
 
-# Future Lines of Work
-- Integrate this project with the iworkin project
-- Integrate with Dragonfire
-	- https://medium.com/@hkdb/siri-alternative-for-ubuntu-a6bc6825b9ad
-	- http://dragon.computer/
-
-
-## Proposal for a context structure
-
-```json
-[
-  {
-    "name": "Context 1",
-    "applications": [
-      {
-        "name": "Eclipse",
-        "path": "/path/to/eclipse/executable",
-        "arguments": [
-          {
-            "type": "POSIX",
-            "argument": "-data",
-            "value": "/path/to/eclipse/workspace"
-          }
-        ]
-      },
-      {
-        "name": "Chromium",
-        "path": "/path/to/chromium/executable",
-        "arguments": [
-          {
-            "type": "GNU",
-            "argument": "--profile-directory",
-            "value": "chromium_profile"
-          },
-          {
-            "type": "GNU",
-            "argument": "--new-window",
-            "value": ""
-          }
-        ],
-        "parameters": [
-          {
-            "name": "Some optional name",
-            "value": "some_url_1"
-          },
-          {
-            "name": "Some optional name",
-            "value": "some_url_2"
-          },
-          {
-            "name": "Some optional name",
-            "value": "some_url_3"
-          },
-          {
-            "name": "Some optional name",
-            "value": "some_url_4"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "name": "Context 2",
-    "applications": [
-      {}
-    ]
-  }
-]
+#Specifiying the configuration file
+DbWS --config=/path/to/my/config_file
 ```
+
+If you want DbWS to be executed automatically every time you log into Ubuntu follow
+[this instructions](https://askubuntu.com/a/48327). 
+
+In case of using any other Linux distribution or Unix based OS, you will need to follow 
+specific instructions for your OS since DbWS is a GUI app instead a 
+command line tool, therefore it may happen that you will not see the 
+window right after login despite the app is being executed.
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+[APACHE](http://www.apache.org/licenses/LICENSE-2.0)
+
+
+----
+
+This README file was made following the recommendations of [makereadme.com](https://www.makeareadme.com/)
