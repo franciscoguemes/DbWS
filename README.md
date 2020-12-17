@@ -74,7 +74,7 @@ to the file [CONFIG_FILE.md](https://github.com/franciscoguemes/DbWS/blob/master
 
 Once you have created your configuration file, your next step will be to define the different 
 contexts you will be using. For this purpose, please have a look to the file 
-[CONTEXT.md](https://github.com/franciscoguemes/DbWS/blob/master/CONFIG_FILE.md).
+[CONTEXTS_FILE.md](https://github.com/franciscoguemes/DbWS/blob/master/CONTEXTS_FILE.md).
 
 
 ## Usage
