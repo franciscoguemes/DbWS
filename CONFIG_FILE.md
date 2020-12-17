@@ -25,7 +25,7 @@ The _LOCAL_ section is mandatory, and it must contain the following variables:
 
 | Section       | Mandatory   | Example value                 | Meaning                              |
 | ------------- | ----------- | ----------------------------- | ------------------------------------ |
-| CONTEXTS_FILE | yes         | ~/.config/DbWS/contexts.json  | Path to the context file definition  |
+| CONTEXTS_FILE | :heavy_check_mark:         | ~/.config/DbWS/contexts.json  | Path to the context file definition  |
 
 ####ENVIRONMENT
 The _ENVIRONMENT_ section is mandatory, but the variables contained inside are
