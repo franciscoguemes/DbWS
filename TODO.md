@@ -96,9 +96,18 @@ seen as just another application more to execute when the user switch to that co
 
 ##MDWiki:
     Open a terminal in the directory of the project
-    Open VS Code with the wiki project
+    Open [VS Code](https://code.visualstudio.com/docs/editor/command-line) with the wiki project
     Open the Hosting page
     Open the Manage packet in the hosting area
     Open the browser showing the wiki in the hosting (the real one)
     Start the python_web_server in the directory of the MDWiki project in local
     Open the browser showing the wiki in the local environment
+
+##DbWS:
+    Open [PyCharm](https://www.jetbrains.com/help/pycharm/working-with-the-ide-features-from-command-line.html) with the DbWS project
+    Open a terminal in the directory of the project
+    Open with the text editor the files
+        contexts.json
+        DbWS.conf
+        logging.conf ???
+    Open the browser showing the Markdown Bookmarks
