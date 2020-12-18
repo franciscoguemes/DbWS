@@ -38,6 +38,7 @@
 
 
 #Application
+1. In the class Application line 70. Review the error case.
 1. In the class Parameter test the method "getValue" and inside this the call to : the_string_represents_an_array_of_strings
 1. Parse command line arguments 
     1. Parse the argument for the configuration file "--config"
