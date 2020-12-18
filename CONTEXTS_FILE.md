@@ -59,13 +59,138 @@ the skeleton of a contexts file.
 }
 ```
 
-##Context Object
+##Context Object Definition
+The context object definition contains the following fields:
+
+| Field        | Mandatory          | Example value | Description                                                                                            |
+|--------------|--------------------|---------------|--------------------------------------------------------------------------------------------------------|
+| name         | :heavy_check_mark: | "Project X"   | The name you want to assign to the specific context                                                    |
+| applications | :heavy_check_mark: |               | An array of JSON objects which each object of the array represent an application (command) to execute. |
+
+##Application Object Definition
+The application object represents an application (or command) to be executed by DbWS and is composed by the following
+fields:
+
+| Field      | Mandatory          | Example value                 | Description                                                                                       |
+|------------|--------------------|-------------------------------|---------------------------------------------------------------------------------------------------|
+| name       | :heavy_check_mark: | Eclipse                       | The name of the application. It can be any name not neccessarly the name of the real application. |
+| path       | :heavy_check_mark: | /path/to/the/excecutable/file | Path to the executable file of the application                                                    |
+| arguments  | :x:                |                               | An array of JSON objects on which each object of the array represent an argument.                 |
+| parameters | :x:                |                               | An array of JSON objects on which each object of the array represent a parameter.                 |
+
+##The *NIX command metaphor
+For DbWS each application object is equivalent to a command that is executed in the terminal of the OS (Operative 
+System), therefore each application object has the same structure as a command would have in the OS's terminal:
+
+```bash
+command -argument1 -argument2 list_of_parameters
+```
+I.e. 
+
+```bash
+ls -la /home/myuser/Documents
+```
+
+__NOTE__: Same as with the commands of the Linux terminal, the arguments and parameters of the application objects in 
+DbWS are optional. I.e. You can just type in your Linux terminal: "_ls_", and the command is executed despite it 
+contains no arguments or parameters. Is the responsibility of the final user to supply the right arguments and 
+parameters. 
+
+The metaphor is not just limited to copy the structure of the commands in the terminal, it also allows to chain multiple
+commands (application objects). In the terminal you might chain multiple commands by using pipes like in the following
+example:
+
+```bash
+cat sample.txt | grep -v a | sort - r
+```
+
+With DbWS you could achieve the same by chaining multiple application objects like you will see in the final example of
+this file. Not only that but DbWS also allows you to use the output of an application as argument of another, or to use
+an application as parameter of another.
+
+##Argument Object Definition
+The argument object contains the following fields:
+
+| Field      | Mandatory          | Example value     | Description                                                                       |
+|------------|--------------------|-------------------|-----------------------------------------------------------------------------------|
+| type       | :heavy_check_mark: | GNU               | The type of the argument. There are only 2 types: "GNU" and "POSIX".              |
+| argument   | :heavy_check_mark: | --argument_option | The argument option                                                               |
+| value      | :x:                | argument_value    | The value for the argument                                                        |
+
+I.e. A GNU argument definition in the command line would look like
+```bash
+command --gnu_argument argument_value
+```
+
+The equivalent in DbWS would be:
+```json
+...
+            {
+              "type": "GNU",
+              "argument": "--gnu_argument",
+              "value": "argument_value"
+            },
+...
+```
+
+--NOTE__: In the previous example of argument definition the hyphens are included in the value of the field "argument"
+. It is mandatory that you include the right amount of hyphens in the "argument" field of the Argument object due to
+sometimes is one single hyphen, and some other times is two, therefore it is impossible for DbWS to automatically add
+the hyphens to the arguments.
 
 
+I.e. A POSIX argument definition in the command line would look like
+```bash
+command -posix_argument=argument_value
+```
+
+The equivalent in DbWS would be:
+```json
+...
+            {
+              "type": "POSIX",
+              "argument": "-posix_argument",
+              "value": "argument_value"
+            }
+...
+```
+
+__NOTE__: In the previous example of POSIX argument definition the "=" sign that separates the argument from its value
+is not included anywhere in the JSON definition. Since the equals sign is always there, DbWS will automatically add it
+for you in the terminal when executing the application.
+
+
+##Parameter Object Definition
+The paramter object contains the following fields:
+
+| Field      | Mandatory          | Example value     | Description                                                                       |
+|------------|--------------------|-------------------|-----------------------------------------------------------------------------------|
+| value      | :heavy_check_mark: | my_value          | The value of the argument as string of text                                       |
+
+I.e. A parameter definition in the command line would look like
+```bash
+command parameter1 parameter2 ... parameterN
+```
+
+The equivalent in DbWS would be:
+```json
+...
+            {
+              "value": "parameter1"
+            },
+            {
+              "value": "parameter2"
+            },
+            ...
+            {
+              "value": "parameterN"
+            },
+...
+```
 
 
 #Example
-Below you have an example that illustrates the different possibilities and the flexibility that offers the context file
+Below you have an example that illustrates the different possibilities, and the flexibility that offers the context file
 in DbWS
 
 ```json
@@ -298,3 +423,139 @@ in DbWS
   }
 ]
 ```
+
+#Troubleshooting
+In order to create a good and efficient context file it is important to understand what is allowed and not allowed to do
+in the context definitions for DbWS.
+
+##Application call as argument
+An argument object definition can be fully replaced by an application object definition. See the example below.
+
+```json
+    {
+      "name": "App call as argument",
+      "applications": [
+        {
+          "name": "Eclipse",
+          "path": "$ECLIPSE_PATH/eclipse",
+          "arguments": [
+            {
+              "name": "echo",
+              "path": "echo",
+              "arguments": [
+                {
+                  "type": "POSIX",
+                  "argument": "-e"
+                }
+              ],
+              "parameters": [
+                {
+                  "value": "['-data','$ECLIPSE_PERSONAL_WORKSPACE']"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+```
+The result of a calling the application supplied as argument is an array of strings that simply represents the results 
+of the application call. In this case the user has the entire responsibility of providing an application definition
+whose result call is a valid (or a sequence of valid) GNU or POSIX argument(s) for the given command. The following
+outcome examples are handled gracefully by the application:
+
+```
+    GNU   --->  ["argument=value"]
+    GNU   --->  ["argument1=value1", "argument2=value2", ..., "argumentN=valueN"]
+    POSIX --->  ["argument", "value"]
+    POSIX --->  ["argument1", "value1", "argument2", "value2", ..., "argumentN", "valueN"]
+```
+
+The example above would produce as result the code below, which would be handled gracefully by the application.
+```bash
+['-data','$ECLIPSE_PERSONAL_WORKSPACE']
+```
+
+
+##Application call as argument value
+Let's assume we have the application object definition showed below. 
+
+__NOTE__: The application object definition below produces the same result as the example in the previous section.
+
+```json
+        {
+          "name": "Eclipse",
+          "path": "$ECLIPSE_PATH/eclipse",
+          "arguments": [
+            {
+              "type": "POSIX",
+              "argument": "-data",
+              "value": {
+                "name": "echo",
+                "path": "echo",
+                "parameters": [
+                  {
+                    "value": "$ECLIPSE_PERSONAL_WORKSPACE"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+```
+
+In the example we can see that the application object has a single argument object definition.
+The argument object definition instead of supplying a value, it gets the value as result of calling a different
+application object. In this case the user is fully responsible for warranting that the application will return a single
+value and not an array of values.
+
+
+##Application call as parameter
+In the code following example we have an application object definition on which the parameter object definition has 
+been replaced by another application object definition.
+
+In other words the results of an application call can be used as the parameter of another application.
+
+```json
+        {
+          "name": "Chromium",
+          "path": "chromium",
+          "arguments": [
+            {
+              "type": "GNU",
+              "argument": "--window-position",
+              "value": "$THIRD_MONITOR_LEFT_UPPER_CORNER_XPS"
+            },
+            {
+              "type": "GNU",
+              "argument": "--profile-directory",
+              "value": "$CHROMIUM_PROFILE_FRANCISCO"
+            },
+            {
+              "type": "GNU",
+              "argument": "--new-window"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "open_bookmarks",
+              "path": "$CHROME_BOOKMARKS_APP_DIR/chrome_bookmarks.py",
+              "arguments": [
+                {
+                  "type": "GNU",
+                  "argument": "--config",
+                  "value": "$CHROME_BOOKMARKS_APP_CONFIG_FILE"
+                }
+              ],
+              "parameters": [
+                {
+                  "value": "/Personal/Login screen"
+                }
+              ]
+            }
+          ]
+        }
+```
+
+__NOTE__: The application object definition used as parameter of the main application object can return a single value
+, a string representation of a Python array of values or multiple strings. All will be handled gracefully by DbWS.
