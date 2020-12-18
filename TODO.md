@@ -1,3 +1,16 @@
+
+
+----
+
+    If we would translate the CallToApplication parameter as pure JSON, the result would be an array of
+    JSON objects of type parameter. See in the JSON configuration file examples of the value "parameters".
+    "parameters": [
+              {
+                "value": "/Personal/\"Login screen\""
+              }
+            ]
+
+
 ----
 
 
