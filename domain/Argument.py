@@ -110,10 +110,14 @@ class CallToApplicationArgument(Argument):
     application. In this case the user has the entire responsibility of providing an external application call
     whose result is a valid (or a sequence of valid) GNU or POSIX argument(s) for the given command. The following
     outcome examples are handled gracefully by the application:
-    GNU   --->  ["argument=value"]
-    GNU   --->  ["argument1=value1", "argument2=value2", ..., "argumentN=valueN"]
-    POSIX --->  ["argument", "value"]
-    POSIX --->  ["argument1", "value1", "argument2", "value2", ..., "argumentN", "valueN"]
+    GNU   --->  --argument=value
+    GNU   --->  ["--argument=value"]
+    GNU   --->  --argument1=value1
+                --argument2=value2
+                --argument3=value3
+    GNU   --->  ["--argument1=value1", "--argument2=value2", ..., "--argumentN=valueN"]
+    POSIX --->  ["-argument", "value"]
+    POSIX --->  ["-argument1", "value1", "-argument2", "value2", ..., "-argumentN", "valueN"]
     """
 
     def __init__(self, application):
