@@ -397,23 +397,38 @@ An argument object definition can be fully replaced by an application object def
       ]
     }
 ```
-The result of a calling the application supplied as argument is an array of strings that simply represents the results 
-of the application call. In this case the user has the entire responsibility of providing an application definition
-whose result call is a valid (or a sequence of valid) GNU or POSIX argument(s) for the given command. The following
-outcome examples are handled gracefully by the application:
 
-```
-    GNU   --->  ["argument=value"]
-    GNU   --->  ["argument1=value1", "argument2=value2", ..., "argumentN=valueN"]
-    POSIX --->  ["argument", "value"]
-    POSIX --->  ["argument1", "value1", "argument2", "value2", ..., "argumentN", "valueN"]
-```
-
-The example above would produce as result the code below, which would be handled gracefully by the application.
+In the example above the result of a calling the application supplied as argument is a 
+[String representation of a Python list](https://stackoverflow.com/questions/10775894/converting-a-string-representation-of-a-list-into-an-actual-list-object) 
+that contains two elements that conform one single POSIX argument. For the given example above, the code produces the 
+following result:
 ```bash
 ['-data','$ECLIPSE_PERSONAL_WORKSPACE']
 ```
 
+
+The result of a calling the application supplied as argument must be one of the following types:
+  - A [String representation of a Python list](https://stackoverflow.com/questions/10775894/converting-a-string-representation-of-a-list-into-an-actual-list-object) 
+    that contains inside one or multiple arguments
+  - A single or multiple strings that represents a valid argument
+  - Multiple strings that represent a set of valid arguments
+
+In this case the user has the entire responsibility of providing an application definition
+whose result call is a valid (or a sequence of valid) GNU or POSIX argument(s) for the given command. The following
+outcome examples are handled gracefully by DbWS:
+
+| Number of arguments | Type  | Example of application result                                                 | Description                                                                                                                                                                                                                                                                                                                            |
+|---------------------|-------|-------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1                   | GNU   | --argument=value                                                              | A string that contains the pair argument-value. Note that the String contains the "=" and the needed hyphens "--" for the argument.                                                                                                                                                                                                    |
+| 1                   | GNU   | ["--argument=value"]                                                          | A String representation of a Python list that contains a single string that represents a single GNU type argument                                                                                                                                                                                                                      |
+| N                   | GNU   | --argument1=value1\n --argument2=value2\n --argument3=value3                  | Multiple strings that contain the pairs argument-value. Note that each String contains the "=", the needed hyphens "--" for the argument and each String is in a different line.                                                                                                                                                       |
+| N                   | GNU   | ["--argument1=value1", "--argument2=value2", ..., "--argumentN=valueN"]       | A String representation of a Python list that contains multiple strings where each String represents a single  GNU type argument.                                                                                                                                                                                                      |
+| 1                   | POSIX | ["-argument", "value"]                                                        | A String representation of a Python list that contains two elements. The first element is the argument (Note that the argument contains the hyphen "-" or double "--" hyphen if needed). The second element in the list is the value for the argument.                                                                                 |
+| N                   | POSIX | ["-argument1", "value1", "-argument2", "value2", ..., "-argumentN", "valueN"] | A String representation of a Python list that contains N elements. Normally the even elements are arguments (Note that arguments may contain the hyphen "-" or double "--" hyphen if needed) and the pair elements are the value for the  preceding argument. Nonetheless the list could have one or multiple arguments without value. |
+
+As you can see DbWS is very flexible but still you need to be aware on the limitations and be careful with the return
+values of the applications that you chain together, specially if you want to use a return value as an entire argument
+for another application.
 
 ##Application call as argument value
 Let's assume we have the application object definition showed below. 
@@ -445,14 +460,16 @@ __NOTE__: The application object definition below produces the same result as th
 In the example we can see that the application object has a single argument object definition.
 The argument object definition instead of supplying a value, it gets the value as result of calling a different
 application object. In this case the user is fully responsible for warranting that the application will return a single
-value and not an array of values.
+value. __In case of returning multiple values DbWS will throw an error__.
 
 
 ##Application call as parameter
 In the code following example we have an application object definition on which the parameter object definition has 
-been replaced by another application object definition.
+been replaced by another application object, therefore the value that this embed application returns will be used as 
+parameter (if it returns multiple values, then the values will be used as parameters). 
 
-In other words the results of an application call can be used as the parameter of another application.
+In other words the results of an application call can be used as the parameter of another application. Same as in the
+terminal of the OS.
 
 ```json
         {
@@ -495,5 +512,32 @@ In other words the results of an application call can be used as the parameter o
         }
 ```
 
-__NOTE__: The application object definition used as parameter of the main application object can return a single value
-, a string representation of a Python array of values or multiple strings. All will be handled gracefully by DbWS.
+The result of a calling the application supplied as parameter must be one of the following types:
+  - A [String representation of a Python list](https://stackoverflow.com/questions/10775894/converting-a-string-representation-of-a-list-into-an-actual-list-object) 
+    that contains inside one or multiple values (parameters)
+  - A single value
+  - Multiple values. Multiple strings that represents multiple parameters
+
+In this case the user has the entire responsibility of providing an application definition
+whose result call is a valid (or a sequence of valid) parameters for the given command. The following
+outcome examples are handled gracefully by DbWS as returned parameters from the application call in the parameters
+attribute:
+
+| Number of parameters | Example of application result                   | Description                                                                                                       |
+|----------------------|-------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
+| 1                    | 550                                             | A single value as application result. It can be a number, a word or a sentence.                                   |
+| 1                    | ["hello!"]                                      | A String representation of a Python list that contains a single string that represents a parameter                |
+| N                    | hello world\n 550\n 1.21                        | Multiple strings that contain parameters. Note that each String is in a different line.                           |
+| N                    | ["parameter1", "parameter2", ..., "parameterN"] | A String representation of a Python list that contains multiple strings where each String represents a parameter. |
+
+As you can see DbWS is very flexible but still you need to be aware on the limitations and be careful with the return
+values of the applications that you chain together, specially if you want to use multiple return values as parameters.
+You need to ensure that either each value is in a different line, or they are contained in a String representation of  
+a Python list.
+
+
+The example above generates the following output. As you can see it is a String representation of a Python list
+that contains multiple parameters. In this specific case each parameter is a valid URL.
+```bash
+['https://github.com/franciscoguemes/online-tools', 'https://franciscoguemes.com/', 'https://www.google.com/search?q=spring+web+app&oq=spring+web+app&aqs=chrome..69i57j69i65.5880j0j1&client=ubuntu&sourceid=chrome&ie=UTF-8', 'https://spring.io/guides/gs/spring-boot/#initial', 'https://spring.io/guides/gs/serving-web-content/', 'https://start.spring.io/', 'https://dzone.com/articles/gradle-vs-maven', 'https://github.com/spring-projects/spring-petclinic/blob/master/pom.xml', 'https://help.github.com/en/github/importing-your-projects-to-github/adding-an-existing-project-to-github-using-the-command-line', 'https://stackoverflow.com/questions/31639059/how-to-add-license-to-an-existing-github-project', 'http://localhost:8080/', 'https://github.com/spring-projects/spring-petclinic', 'https://stackoverflow.com/questions/46265775/spring-boot-project-shows-the-login-page', 'https://www.google.com/search?q=login+screen+spring+boot&oq=login+screen+spring+boot&aqs=chrome..69i57.4031j0j1&client=ubuntu&sourceid=chrome&ie=UTF-8', 'https://www.baeldung.com/spring-security-login', 'https://spring.io/guides/gs/securing-web/', 'https://stackoverflow.com/questions/51221777/failed-to-configure-a-datasource-url-attribute-is-not-specified-and-no-embedd', 'http://localhost:8080/', 'https://spring.io/guides/tutorials/react-and-spring-data-rest/']
+```
