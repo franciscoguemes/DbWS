@@ -2,7 +2,8 @@
 import logging
 from abc import ABC, abstractmethod
 
-from domain.Context import transform_string_to_array_of_strings, the_string_is_empty
+from domain.Context import transform_string_to_array_of_strings, the_string_is_empty, \
+    the_string_represents_an_array_of_strings
 
 
 class Argument(ABC):
@@ -14,23 +15,6 @@ class Argument(ABC):
 
     TYPE_GNU = "GNU"
     TYPE_POSIX = "POSIX"
-
-    @staticmethod
-    def the_string_represents_an_array_of_strings(string_to_test):
-        """
-        Tells whether the given string represents an string array or not. I.e:
-        string_to_test = "" # False
-        string_to_test = "''" # False
-        string_to_test = "foo" # False
-        string_to_test = "'foo', 'and', 'foo'" # False
-        string_to_test = "[]" # True
-        string_to_test = "['']" # True
-        string_to_test = "['string1', 'string2', ... ,'stringN']" # True
-
-        :param string_to_test: The string to check.
-        :return: True if the given string represents an array of strings otherwise False.
-        """
-        return (string_to_test[0:2] == "['" and string_to_test[-2:] == "']") or (len(string_to_test) == 2 and string_to_test == "[]")
 
     @staticmethod
     def check_type(arg_type):
@@ -86,8 +70,8 @@ class RealArgument(Argument):
 
 class CallToApplicationArgumentValue(Argument):
     """
-    The argument is calculated as a combination of processing the paramters "type" and "argument" plus calling
-    to an external application represented by the last paramter "application".
+    The overall argument is calculated as a combination of processing the fields "type" and "argument" plus calling
+    to an external application object embedded in the value of the field "value".
 
     The result of a CallToApplicationArgumentValue is an array of strings in the following way:
     GNU   --->  ["argument=value"]
@@ -108,7 +92,7 @@ class CallToApplicationArgumentValue(Argument):
         if the_string_is_empty(application_result):
             raise ValueError("The result of the application can not be empty!!!")
 
-        if self.the_string_represents_an_array_of_strings(application_result):
+        if the_string_represents_an_array_of_strings(application_result):
             raise ValueError("The result of the application must be a single value. "
                              "It can not be an array of values. Otherwise replace the entire argument definition by"
                              "an application call definition and ensure the application returns a valid argument for"
@@ -119,7 +103,9 @@ class CallToApplicationArgumentValue(Argument):
 
 class CallToApplicationArgument(Argument):
     """
-    The entire argument is the result of calling to an external application.
+    The overall argument is the result of calling to an external application object defined in the place of an
+    argument object.
+
     The result of a CallToApplicationArgument is an array of strings that simply represents the results of the
     application. In this case the user has the entire responsibility of providing an external application call
     whose result is a valid (or a sequence of valid) GNU or POSIX argument(s) for the given command. The following
@@ -146,7 +132,7 @@ class CallToApplicationArgument(Argument):
         if the_string_is_empty(application_result):
             raise ValueError("The result of the application can not be empty!!!")
 
-        if self.the_string_represents_an_array_of_strings(application_result):
+        if the_string_represents_an_array_of_strings(application_result):
             # logging.debug(f"The string represents an array of strings: {application_result}")
             application_result = transform_string_to_array_of_strings(application_result)
         else:  # The string is a single string, so wrap it into an array

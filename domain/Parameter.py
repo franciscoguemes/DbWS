@@ -2,7 +2,8 @@
 
 from abc import ABC, abstractmethod
 
-from domain.Context import transform_string_to_array_of_strings, the_string_is_empty
+from domain.Context import transform_string_to_array_of_strings, the_string_is_empty, \
+    the_string_represents_an_array_of_strings
 
 
 class Parameter(ABC):
@@ -30,10 +31,6 @@ class RealParameter(Parameter):
         #     return "\"" + value + "\""
         # else:
         #     return self.__value
-
-
-def the_string_represents_an_array_of_strings(result):
-    pass
 
 
 class CallToApplicationParameter(Parameter):
