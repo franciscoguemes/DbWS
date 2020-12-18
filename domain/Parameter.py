@@ -24,24 +24,24 @@ class RealParameter(Parameter):
 
     def get_value(self):
         return self.__value
-        # if " " in self.__value:
-        #     # return "'" + self.__value + "'"
-        #     value = self.__value.replace(" ", "\\ ")
-        #     value = value.replace("\"", "")
-        #     return "\"" + value + "\""
-        # else:
-        #     return self.__value
 
 
 class CallToApplicationParameter(Parameter):
     """
-    If we would translate the CallToApplication parameter as pure JSON, the result would be an array of
-    JSON objects of type parameter. See in the JSON configuration file examples of the value "parameters".
-    "parameters": [
-              {
-                "value": "/Personal/\"Login screen\""
-              }
-            ]
+    The overall parameter is the result of calling to an external application object defined in the place of a
+     parameter object.
+
+    The result of a CallToApplicationParameter is an array of strings that simply represents the results of the
+    application. In this case the user has the entire responsibility of providing an external application call
+    whose result is a valid (or a sequence of valid) parameter for the given command. The following
+    outcome examples are handled gracefully by the application:
+
+    1 parameter   --->  hello world!
+    1 parameter   --->  ["hello world!"]
+    N parameters  --->  hello world!
+                        My name is Francisco
+                        21.1
+    N parameters  --->  ["parameter1", "parameter2", ..., "parameterN"]
     """
     def __init__(self, application):
         self.__application = application
@@ -54,15 +54,12 @@ class CallToApplicationParameter(Parameter):
 
         if the_string_represents_an_array_of_strings(result):
             result = transform_string_to_array_of_strings(result)
-            # print(result)
-        return result
+        else:
+            # Is the string a multiline string (contains at least one character '\n') ?
+            # https://stackoverflow.com/questions/24237524/how-to-split-a-python-string-on-new-line-characters
+            multiple_lines = list(filter(bool, result.splitlines()))
+            if len(multiple_lines) > 1:
+                result = map(lambda x: x.strip(), multiple_lines)
 
-    # def __transform_string_to_array_of_strings(self, result):
-    #     array_of_strings = []
-    #     result = result[1:-1]  # Delete the first and last character...
-    #     urls = result.split(", ")
-    #     for url in urls:
-    #         array_of_strings.append(url[1:-1])
-    #     # return " ".join(array_of_strings)
-    #     return array_of_strings
+        return result
 
