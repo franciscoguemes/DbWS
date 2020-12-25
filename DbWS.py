@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import argparse
 import logging
 import os
 import sys
@@ -34,17 +35,41 @@ def get_schema_file(schema_version):
     schema_file = SCHEMA_DIRECTORY + os.path.sep + schema_file_name
     return schema_file
 
+
 def main():
     logging.basicConfig(level=logging.DEBUG)
 
     try:
-        logging.info("Parse arguments...")
-        # TODO: Parse arguments
-        # DbWS --config=/path/to/my/config_file
-        # if no arguments are supplied then the application will take the config from .config/DbWS/DbWS.conf
+
+        logging.info("Parse command line arguments...")
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--config", help="Path to the general configuration file")
+        parser.add_argument("--logging", help="Path to the logging configuration file")
+        args = parser.parse_args()
+
+        if args.logging:
+            logging.info(f"Logging configuration file {args.logging} has been supplied")
+            # TODO: Parse the supplied configuration
+            #   https://docs.python.org/3.6/howto/logging.html#configuring-logging
+        else:
+            logging.info("Using the default logging configuration...")
+            #TODO: Define the default configuration
+            #   https://docs.python.org/3.6/howto/logging.html#configuring-logging
+            pass
+
+        config_file_path = None
+        if args.config:
+            # DbWS --config=/path/to/my/config_file
+            logging.info(f"Configuration file {args.config} has been supplied")
+            config_file_path = Path(args.config).absolute()
+            check_configuration_file_exists(config_file_path)
+        else:
+            # if no arguments are supplied then the application will take the config from .config/DbWS/DbWS.conf
+            logging.info("Using the default configuration...")
+            config_file_path = get_default_configuration_path()
 
         logging.info("Load configuration...")
-        config = load_configuration()
+        config = load_configuration(config_file_path)
         contexts_file = config[CONFIG_KEY_LOCAL][CONFIG_KEY_CONTEXTS_FILES]
         # print(contexts_file)
 
@@ -95,26 +120,32 @@ def main():
         print(e)
 
 
-def load_configuration():
-
+def get_default_configuration_path():
     # Check if the config dir exists...
-    cdir = Path(DEFAULT_CONFIG_DIR).absolute()
-    if not cdir.is_dir():
-        msg = "The configuration directory: " + str(cdir) + " does not exists." \
+    configuration_directory = Path(DEFAULT_CONFIG_DIR).absolute()
+    if not configuration_directory.is_dir():
+        msg = "The configuration directory: " + str(configuration_directory) + " does not exists." \
               + " Please read the app documentation and fix the issue."
         raise NotADirectoryError(msg)
 
     # Check if the config file exists...
-    cfile = cdir / DEFAULT_CONFIG_FILE
-    if not cfile.is_file():
-        msg = "The configuration file: " + str(cfile) + " does not exists." \
+    configuration_file = configuration_directory / DEFAULT_CONFIG_FILE
+    check_configuration_file_exists(configuration_file)
+    return configuration_file
+
+
+def check_configuration_file_exists(configuration_file):
+    if not configuration_file.is_file():
+        msg = "The configuration file: " + str(configuration_file) + " does not exists." \
               + " Please read the app documentation and fix the issue."
         raise FileNotFoundError(msg)
 
+
+def load_configuration(configuration_file):
     config = configparser.ConfigParser()
     # Preserves the case sensitive in the parser...
     config.optionxform = str
-    config.read(cfile.absolute())
+    config.read(configuration_file.absolute())
     # print_configuration(config)
     check_config(config)
     return config
