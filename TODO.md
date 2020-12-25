@@ -56,6 +56,7 @@
 1. Parse command line arguments 
     1. Parse the argument for the configuration file "--config"
     2. Parse the argument for the logging configuration file "--logging"
+    3. Update the documentation accordingly
 2. Improve the [logging](https://docs.python.org/3.6/howto/logging.html)
 ``` 
         if no logging configuration file is supplied
