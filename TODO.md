@@ -52,7 +52,7 @@
 
 #Application
 1. In the class Application line 70. Review the error case.
-1. In the class Parameter test the method "getValue" and inside this the call to : the_string_represents_an_array_of_strings
+1. Look at the console errors when selecting the option "Simple thingy".
 1. Parse command line arguments 
     1. Parse the argument for the configuration file "--config"
     2. Parse the argument for the logging configuration file "--logging"
@@ -63,12 +63,12 @@
         else
             Read the logging configuration from a file
 ```
+3. Create test cases
+    1. Create a test case that includes a call to the method Context.transform_string_to_array_of_strings
 
 #Documentation
 
 ## README.md
-1. Explain the Context definition in the CONTEXT.md file. Do not forget to mention the JSON
-   schema versions.
 1. After the "Usage" section create a section explaining how to execute DBwS automatically
 after login in the OS.
 1. Create a file with the takeaways of the project.
