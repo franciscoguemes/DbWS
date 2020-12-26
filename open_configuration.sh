@@ -1,3 +1,3 @@
-CONFIG_FOLDER=/home/francisco/.config/DbWS
+CONFIG_DIRECTORY=/home/francisco/.config/DbWS
 
-gedit $CONFIG_FOLDER/contexts_example.json  $CONFIG_FOLDER/contexts.json  $CONFIG_FOLDER/DbWS.conf $CONFIG_FOLDER/logging.conf&
+gedit $CONFIG_DIRECTORY/contexts_example.json  $CONFIG_DIRECTORY/contexts.json  $CONFIG_DIRECTORY/DbWS.conf $CONFIG_DIRECTORY/logging.conf &
