@@ -54,6 +54,7 @@
 1. In the class Application line 70. Review the error case.
 1. Look at the console errors when selecting the option "Simple thingy".
 1. Parse command line arguments 
+    1. Make arguments for configuration file and logging file compulsory
     1. Parse the argument for the configuration file "--config"
     2. Parse the argument for the logging configuration file "--logging"
     3. Update the documentation accordingly
