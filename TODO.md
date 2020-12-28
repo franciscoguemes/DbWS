@@ -54,9 +54,6 @@
 1. In the class Application line 70. Review the error case.
 1. Look at the console errors when selecting the option "Simple thingy".
 2. Improve the [logging](https://docs.python.org/3.6/howto/logging.html)
-    1. Create a logger that logs only DbWS classes/functions
-    2. Format the logging in a proper way
-    3. Save the logging to a file...
     4. Save context data with the errors in the logging file.
 3. Create test cases
     1. Create a test case that includes a call to the method Context.transform_string_to_array_of_strings
