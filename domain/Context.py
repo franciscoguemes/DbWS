@@ -29,28 +29,6 @@ def transform_string_to_array_of_strings(result):
     return ast.literal_eval(result)
 
 
-# def transform_string_to_array_of_strings(result):
-#     result = result.strip()
-#     array_of_strings = []
-#     if result == "[]" or result == "['']" or result == '[""]':
-#         return array_of_strings
-#
-#     result = result[1:-1]  # Delete the first and last character ("[" and "]")
-#     result = result.strip()
-#     # logging.debug(result)
-#     strings = None
-#     if (result[0] == "\"" and result[-1] == "\"") or (result[0] == "'" and result[-1] == "'"):
-#         strings = re.split(", |,", result)
-#         # strings = result.split(", ")
-#     else:
-#         raise ValueError(f"The given string: \"{result}\" do not represent an array of strings!!!")
-#
-#     for string in strings:
-#         array_of_strings.append(string[1:-1])
-#     # return " ".join(array_of_strings)
-#     return array_of_strings
-
-
 class Context:
     """
     The Context class. This class represents a Context in the domain of the logic.

@@ -37,14 +37,6 @@ class Argument(ABC):
         else:  # It should not enter here since there is only those types of arguments
             raise ValueError(f"Only types: '{Argument.TYPE_GNU}' and '{Argument.TYPE_POSIX}' are allowed!")
 
-        # if value:
-        #     if arg_type == Argument.TYPE_GNU:
-        #         build_arg.append(argument + "=" + value)
-        #     elif arg_type == Argument.TYPE_POSIX:
-        #         build_arg.append(argument)
-        #         build_arg.append(value)
-        #     else:  # It should not enter here since there is only those types of arguments
-        #         raise ValueError(f"Only types: '{Argument.TYPE_GNU}' and '{Argument.TYPE_POSIX}' are allowed!")
         return build_arg
 
     @abstractmethod
@@ -125,23 +117,13 @@ class CallToApplicationArgument(Argument):
 
     def as_string_array(self):
         application_result = self.__application.get_result_as_string()
-        # logging.debug(application_result)
-        # if isinstance(application_result, str):
-        #     logging.debug("Is a string")
-        # elif isinstance(application_result, dict):
-        #     logging.debug("Is a dictionary")
-        # else:
-        #     logging.debug("I do not know what is it")
         application_result = application_result.strip()
         if the_string_is_empty(application_result):
             raise ValueError("The result of the application can not be empty!!!")
 
         if the_string_represents_an_array_of_strings(application_result):
-            # logging.debug(f"The string represents an array of strings: {application_result}")
             application_result = transform_string_to_array_of_strings(application_result)
         else:  # The string is a single string, so wrap it into an array
-            # logging.debug(f"The string represents a single string: {application_result}")
-
             # Is the string a multiline string (contains at least one character '\n') ?
             # https://stackoverflow.com/questions/24237524/how-to-split-a-python-string-on-new-line-characters
             multiple_lines = list(filter(bool, application_result.splitlines()))

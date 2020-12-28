@@ -55,16 +55,16 @@ def main():
         logger = logging.getLogger('DbWS')
 
         # Parse general configuration: DbWS --config=/path/to/my/config_file
-        logger.info("Parse command line arguments...")
+        logger.debug("Parse command line arguments...")
         config_file_path = Path(args.config).absolute()
         check_file_exists(config_file_path)
 
-        logger.info("Load configuration...")
+        logger.debug("Load configuration...")
         config = load_configuration(config_file_path)
         contexts_file = config[CONFIG_KEY_LOCAL][CONFIG_KEY_CONTEXTS_FILES]
         # print(contexts_file)
 
-        logger.info("Validate against schema...")
+        logger.debug("Validate against schema...")
         context_parser = ContextParser(contexts_file, get_config_section_as_dictionary(config, CONFIG_KEY_ENVIRONMENT))
         schema_version = context_parser.get_schema_version()
 
@@ -79,7 +79,7 @@ def main():
         # print("It validates correctly...")
 
 
-        logger.info("Parse Contexts...")
+        logger.debug("Parse Contexts...")
         # TODO: Parse contexts
         # http://commons.apache.org/proper/commons-cli/
         #   When parsing context arguments remember that:
@@ -93,7 +93,7 @@ def main():
         # for context in contexts:
         #     print(context.get_name())
 
-        logger.info("Show initial window...")
+        logger.debug("Show initial window...")
         root = Tk()
         # icon = PhotoImage(file="schemas/webserver.png")
         # root.iconphoto(True, icon)

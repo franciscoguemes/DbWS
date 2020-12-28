@@ -2,6 +2,7 @@
 import logging
 import subprocess
 
+logger = logging.getLogger('DbWS')
 
 class Application:
     """
@@ -18,14 +19,14 @@ class Application:
         return self.__name
 
     def get_result_as_string(self):
-        logging.debug(f"On get_result_as_string() method application={self.__name}")
+        logger.debug(f"Method application={self.__name}")
         full_command = self.get_full_command()
-        logging.debug(f"full_command: {full_command}")
+        logger.debug(f"full_command: {full_command}")
 
         application = subprocess.Popen(full_command, stdout=subprocess.PIPE)
         application.wait()
         result = application.communicate()[0]
-        logging.debug(f"result: {result}")
+        logger.debug(f"result: {result}")
         result = result.decode("utf-8")
         return result
         #
@@ -36,9 +37,9 @@ class Application:
         # return result
 
     def execute(self):
-        logging.debug(f"On execute() method application={self.__name}")
+        logger.debug(f"Method application={self.__name}")
         full_command = self.get_full_command()
-        logging.debug(full_command)
+        logger.debug(full_command)
         # list_files = subprocess.run(full_command)
         # print("The exit code was: %d" % list_files.returncode)
 
