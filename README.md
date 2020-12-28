@@ -76,17 +76,30 @@ Once you have created your configuration file, your next step will be to define 
 contexts you will be using. For this purpose, please have a look to the file 
 [CONTEXTS_FILE.md](https://github.com/franciscoguemes/DbWS/blob/master/CONTEXTS_FILE.md).
 
+Finally you will need to create a logging file to supply the logging configuration. See the 
+section [LOGGING_FILE.md](https://github.com/franciscoguemes/DbWS/blob/master/LOGGING_FILE.md)
+for this purpose.
 
 ## Usage
 Execute in a terminal the command _DbWS_ as in the example below.
-```bash
-# Usin the default configuration file:  ~/.config/DbWS/DbWS.conf 
-# You are supposed to create the file
-DbWS
-
-#Specifiying the configuration file
-DbWS --config=/path/to/my/config_file
+```console
+/path/to/DbWS/directory/DbWS.py --config=/path/to/my/config_file --logging=/path/to/my/logging_file
 ```
+
+As you see this is quite laborious and prone to error, hence I recommend you to take the script DbWS.sh
+supplied in the project and adapt it consequently to your environment. Below you can see as an example
+the content of the file DbWS.sh.
+
+```bash
+DbWS_DIRECTORY=/home/francisco/git/Francisco/github/DbWS
+CONFIG_DIRECTORY=/home/francisco/.config/DbWS
+
+$DbWS_DIRECTORY/DbWS.py --config=$CONFIG_DIRECTORY/DbWS.conf --logging=$CONFIG_DIRECTORY/logging.conf
+```
+
+In order to ease even more the execution of the script DbWS.sh you can place the file in some directory 
+included in your [$PATH](https://opensource.com/article/17/6/set-path-linux) variable. By doing that you 
+will be able to execute the DbWS with just typing the command anywhere in a terminal.
 
 If you want DbWS to be executed automatically every time you log into Ubuntu follow
 [this instructions](https://askubuntu.com/a/48327). 

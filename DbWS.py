@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import argparse
 import logging
+import logging.config
 import os
 import sys
 from json import JSONDecodeError
@@ -37,43 +38,33 @@ def get_schema_file(schema_version):
 
 
 def main():
-    logging.basicConfig(level=logging.DEBUG)
 
     try:
-
-        logging.info("Parse command line arguments...")
         parser = argparse.ArgumentParser()
-        parser.add_argument("--config", help="Path to the general configuration file")
-        parser.add_argument("--logging", help="Path to the logging configuration file")
+        parser._action_groups.pop()
+        required = parser.add_argument_group('required arguments')
+        optional = parser.add_argument_group('optional arguments')
+        required.add_argument("-c", "--config", help="Path to the general configuration file", required=True)
+        required.add_argument("-l", "--logging", help="Path to the logging configuration file", required=True)
         args = parser.parse_args()
 
-        if args.logging:
-            logging.info(f"Logging configuration file {args.logging} has been supplied")
-            # TODO: Parse the supplied configuration
-            #   https://docs.python.org/3.6/howto/logging.html#configuring-logging
-        else:
-            logging.info("Using the default logging configuration...")
-            #TODO: Define the default configuration
-            #   https://docs.python.org/3.6/howto/logging.html#configuring-logging
-            pass
+        # Parse logging configuration: DbWS --logging=/path/to/my/logging_file
+        logging_file_path = Path(args.logging).absolute()
+        check_file_exists(logging_file_path)
+        logging.config.fileConfig(logging_file_path)
+        logger = logging.getLogger('DbWS')
 
-        config_file_path = None
-        if args.config:
-            # DbWS --config=/path/to/my/config_file
-            logging.info(f"Configuration file {args.config} has been supplied")
-            config_file_path = Path(args.config).absolute()
-            check_configuration_file_exists(config_file_path)
-        else:
-            # if no arguments are supplied then the application will take the config from .config/DbWS/DbWS.conf
-            logging.info("Using the default configuration...")
-            config_file_path = get_default_configuration_path()
+        # Parse general configuration: DbWS --config=/path/to/my/config_file
+        logger.info("Parse command line arguments...")
+        config_file_path = Path(args.config).absolute()
+        check_file_exists(config_file_path)
 
-        logging.info("Load configuration...")
+        logger.info("Load configuration...")
         config = load_configuration(config_file_path)
         contexts_file = config[CONFIG_KEY_LOCAL][CONFIG_KEY_CONTEXTS_FILES]
         # print(contexts_file)
 
-        logging.info("Validate against schema...")
+        logger.info("Validate against schema...")
         context_parser = ContextParser(contexts_file, get_config_section_as_dictionary(config, CONFIG_KEY_ENVIRONMENT))
         schema_version = context_parser.get_schema_version()
 
@@ -88,7 +79,7 @@ def main():
         # print("It validates correctly...")
 
 
-        logging.info("Parse Contexts...")
+        logger.info("Parse Contexts...")
         # TODO: Parse contexts
         # http://commons.apache.org/proper/commons-cli/
         #   When parsing context arguments remember that:
@@ -102,7 +93,7 @@ def main():
         # for context in contexts:
         #     print(context.get_name())
 
-        logging.info("Show initial window...")
+        logger.info("Show initial window...")
         root = Tk()
         # icon = PhotoImage(file="schemas/webserver.png")
         # root.iconphoto(True, icon)
@@ -112,12 +103,14 @@ def main():
         main_window.pack()
         root.mainloop()
 
+    except FileNotFoundError as e:
+        logger.exception(e)
     except JSONDecodeError as e:
-        print(e)
+        logger.exception(e)
     except InvalidContextFileError as e:
-        print(e)
+        logger.exception(e)
     except ValidationError as e:
-        print(e)
+        logger.exception(e)
 
 
 def get_default_configuration_path():
@@ -130,14 +123,14 @@ def get_default_configuration_path():
 
     # Check if the config file exists...
     configuration_file = configuration_directory / DEFAULT_CONFIG_FILE
-    check_configuration_file_exists(configuration_file)
+    check_file_exists(configuration_file)
     return configuration_file
 
 
-def check_configuration_file_exists(configuration_file):
+def check_file_exists(configuration_file):
     if not configuration_file.is_file():
-        msg = "The configuration file: " + str(configuration_file) + " does not exists." \
-              + " Please read the app documentation and fix the issue."
+        msg = "The file: " + str(configuration_file) + " does not exists." \
+              + " Please supply a file that exists."
         raise FileNotFoundError(msg)
 
 
