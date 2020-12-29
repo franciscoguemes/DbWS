@@ -4,6 +4,7 @@ from tkinter import Button
 class WindowBuilder:
     DEFAULT_HEIGHT = 200
     DEFAULT_WIDTH = 200
+    MAX_CONTEXTS = 16
 
     def __init__(self, main_window, contexts):
         self.__main_window = main_window
@@ -14,12 +15,12 @@ class WindowBuilder:
     def __calculate_geometry(self):
 
         if self.__num == 0:
-            # TODO: Raise an exception here!!! Don't you have any project?
-            pass
+            raise ValueError(f"There are no contexts declared!!!")
 
-        if self.__num > 15:
-            # TODO: Raise an exception here!!! Too many projects!!!
-            pass
+        if self.__num > WindowBuilder.MAX_CONTEXTS:
+            raise ValueError(f"The maximum allowed amount of defined contexts is '{WindowBuilder.MAX_CONTEXTS}'.\n"
+                             f"The UI is not prepared to handle more contexts than those.\n"
+                             f"Please review your contexts definition file and reduce the amount of contexts.")
 
         geometry = {
             1: (1, 1),

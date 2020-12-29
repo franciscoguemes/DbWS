@@ -59,6 +59,7 @@
     1. Create a test case that includes a call to the method Context.transform_string_to_array_of_strings
 4. Once the user selects an option the application closes automatically
 5. The icon shows in the launcher the right icon
+6. Remove the limitation of contexts that the UI can handle (WindowBuilder.py)
 
 #Documentation
 
@@ -102,21 +103,3 @@ seen as just another application more to execute when the user switch to that co
     Open the browser showing the page in desktop
     Open the browser showing the page in mobile
     Docker container with the Apache web server + PHP installed ???
-
-##MDWiki:
-    Open a terminal in the directory of the project
-    Open [VS Code](https://code.visualstudio.com/docs/editor/command-line) with the wiki project
-    Open the Hosting page
-    Open the Manage packet in the hosting area
-    Open the browser showing the wiki in the hosting (the real one)
-    Start the python_web_server in the directory of the MDWiki project in local
-    Open the browser showing the wiki in the local environment
-
-##DbWS:
-    Open [PyCharm](https://www.jetbrains.com/help/pycharm/working-with-the-ide-features-from-command-line.html) with the DbWS project
-    Open a terminal in the directory of the project
-    Open with the text editor the files
-        contexts.json
-        DbWS.conf
-        logging.conf ???
-    Open the browser showing the Markdown Bookmarks
