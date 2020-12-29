@@ -29,7 +29,7 @@ class Argument(ABC):
             if value:
                 build_arg.append(argument + "=" + value)
             else:
-                raise ValueError(f"For a: '{Argument.TYPE_GNU}' argument type the value can not be \"None\" or empty")
+                build_arg.append(argument)
         elif arg_type == Argument.TYPE_POSIX:
             build_arg.append(argument)
             if value:
