@@ -119,7 +119,8 @@ The argument object contains the following fields:
 
 I.e. A GNU argument definition in the command line would look like
 ```bash
-command --gnu_argument argument_value
+command --gnu_argument
+command --gnu_argument=argument_value
 ```
 
 The equivalent in DbWS would be:
@@ -133,15 +134,14 @@ The equivalent in DbWS would be:
 ...
 ```
 
---NOTE__: In the previous example of argument definition the hyphens are included in the value of the field "argument"
-. It is mandatory that you include the right amount of hyphens in the "argument" field of the Argument object due to
-sometimes is one single hyphen, and some other times is two, therefore it is impossible for DbWS to automatically add
-the hyphens to the arguments.
-
+__NOTE__: In the previous example of POSIX argument definition the "=" sign that separates the argument from its value
+is not included anywhere in the JSON definition. Since the equals sign is always there for GNU arguments, DbWS will 
+automatically add it for you in the terminal when executing the application.
 
 I.e. A POSIX argument definition in the command line would look like
 ```bash
-command -posix_argument=argument_value
+command -posix_argument
+command -posix_argument argument_value
 ```
 
 The equivalent in DbWS would be:
@@ -155,9 +155,10 @@ The equivalent in DbWS would be:
 ...
 ```
 
-__NOTE__: In the previous example of POSIX argument definition the "=" sign that separates the argument from its value
-is not included anywhere in the JSON definition. Since the equals sign is always there, DbWS will automatically add it
-for you in the terminal when executing the application.
+--NOTE__: In the previous examples of argument definitions the hyphens are included in the value of the JSON field 
+"argument". It is mandatory that you include the right amount of hyphens in the "argument" field of the Argument object 
+due to sometimes is one single hyphen, and some other times is two, therefore it is impossible for DbWS to automatically 
+add the hyphens to the arguments.
 
 
 ##Parameter Object Definition

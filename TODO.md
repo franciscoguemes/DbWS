@@ -57,6 +57,8 @@
     4. Save context data with the errors in the logging file.
 3. Create test cases
     1. Create a test case that includes a call to the method Context.transform_string_to_array_of_strings
+4. Once the user selects an option the application closes automatically
+5. The icon shows in the launcher the right icon
 
 #Documentation
 
