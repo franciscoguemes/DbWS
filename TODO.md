@@ -82,7 +82,10 @@ after login in the OS.
         - Offer the option of closing the Context
         - Offer the option to switch to another Context
         - See when was the last reboot: https://unix.stackexchange.com/questions/131775/how-long-has-my-linux-system-been-running
-
+- Close opened contexts:
+    - [Get a list of open windows in Linux](https://superuser.com/questions/176754/get-a-list-of-open-windows-in-linux?answertab=votes#tab-top)
+    - [How can I get a list of all open windows in the command line?](https://askubuntu.com/questions/23427/how-can-i-get-a-list-of-all-open-windows-in-the-command-line)
+    - [Close active window from terminal](https://askubuntu.com/questions/183771/close-active-window-from-terminal)
 
     
 ----
@@ -98,8 +101,5 @@ seen as just another application more to execute when the user switch to that co
 #Contexts to create
 
 ##my Website:
-    Open the Hosting page
-    Open Filezilla
     Open the browser showing the page in desktop
     Open the browser showing the page in mobile
-    Docker container with the Apache web server + PHP installed ???
