@@ -1,13 +1,13 @@
 
 #What is a Context for DbWS?
-A so called context in the universe of DbWS is a project or a set of tasks you are working on.
+A so-called context in the universe of DbWS is a project, or a set of tasks you are working on.
 For DbWS there it is even more straight forward, a context is all the applications (and their respective 
 configurations), commands and any other operations that you need to perform in your computer when you switch 
 from one project (context) to another.  
 
 #The Contexts file
 The context file is a file that contains all the definitions of your different contexts in **JSON** format.
-The contexts file can have any name and it can be in any directory, you just need to specify which is your contexts
+The contexts file can have any name, and it can be in any directory, you just need to specify which is your contexts
 file in the [configuration file](https://github.com/franciscoguemes/DbWS/blob/master/CONFIG_FILE.md).
 
 #Formatting
@@ -73,8 +73,8 @@ fields:
 
 | Field      | Mandatory          | Example value                 | Description                                                                                       |
 |------------|--------------------|-------------------------------|---------------------------------------------------------------------------------------------------|
-| name       | :heavy_check_mark: | Eclipse                       | The name of the application. It can be any name not neccessarly the name of the real application. |
-| path       | :heavy_check_mark: | /path/to/the/excecutable/file | Path to the executable file of the application                                                    |
+| name       | :heavy_check_mark: | Eclipse                       | The name of the application. It can be any name not necessarily the name of the real application. |
+| path       | :heavy_check_mark: | /path/to/the/executable/file  | Path to the executable file of the application                                                    |
 | arguments  | :x:                |                               | An array of JSON objects on which each object of the array represent an argument.                 |
 | parameters | :x:                |                               | An array of JSON objects on which each object of the array represent a parameter.                 |
 
@@ -162,7 +162,7 @@ add the hyphens to the arguments.
 
 
 ##Parameter Object Definition
-The paramter object contains the following fields:
+The parameter object contains the following fields:
 
 | Field      | Mandatory          | Example value     | Description                                                                       |
 |------------|--------------------|-------------------|-----------------------------------------------------------------------------------|
@@ -537,7 +537,7 @@ You need to ensure that either each value is in a different line, or they are co
 a Python list.
 
 
-The example above generates the following output. As you can see it is a String representation of a Python list
+The example above generates the following output, as you can see it is a String representation of a Python list
 that contains multiple parameters. In this specific case each parameter is a valid URL.
 ```bash
 ['https://github.com/franciscoguemes/online-tools', 'https://franciscoguemes.com/', 'https://www.google.com/search?q=spring+web+app&oq=spring+web+app&aqs=chrome..69i57j69i65.5880j0j1&client=ubuntu&sourceid=chrome&ie=UTF-8', 'https://spring.io/guides/gs/spring-boot/#initial', 'https://spring.io/guides/gs/serving-web-content/', 'https://start.spring.io/', 'https://dzone.com/articles/gradle-vs-maven', 'https://github.com/spring-projects/spring-petclinic/blob/master/pom.xml', 'https://help.github.com/en/github/importing-your-projects-to-github/adding-an-existing-project-to-github-using-the-command-line', 'https://stackoverflow.com/questions/31639059/how-to-add-license-to-an-existing-github-project', 'http://localhost:8080/', 'https://github.com/spring-projects/spring-petclinic', 'https://stackoverflow.com/questions/46265775/spring-boot-project-shows-the-login-page', 'https://www.google.com/search?q=login+screen+spring+boot&oq=login+screen+spring+boot&aqs=chrome..69i57.4031j0j1&client=ubuntu&sourceid=chrome&ie=UTF-8', 'https://www.baeldung.com/spring-security-login', 'https://spring.io/guides/gs/securing-web/', 'https://stackoverflow.com/questions/51221777/failed-to-configure-a-datasource-url-attribute-is-not-specified-and-no-embedd', 'http://localhost:8080/', 'https://spring.io/guides/tutorials/react-and-spring-data-rest/']
