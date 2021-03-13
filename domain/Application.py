@@ -47,7 +47,7 @@ class Application:
 
     def get_full_command(self):
         """
-        Returns the command as an array of strings. I.e ["ls", "-a", -"l", "-h"]
+        Returns the command as an array of strings. I.e ["ls", "-a", "-l", "-h"]
         :return: An array of strings that represents the command the arguments (options and values (if needed) and
         the parameters (if any)
         """
