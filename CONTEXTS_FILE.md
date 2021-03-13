@@ -596,7 +596,7 @@ to avoid blank characters in paths and file names as much as possible.
 In this specific case the easiest would be to go your Chromium directory (i.e. ~/snap/chromium/common/chromium
 ) and rename the user profile to Profile_1:
 
-```
+```shell
 cd ~/snap/chromium/common/chromium
 mv 'Profile 1' Profile_1
 ```
@@ -608,4 +608,3 @@ surrounded by a scape sequence that allows the OS to handle the value gracefully
 order to scape the double quote '"' in a JSON file.
 
 
-cp -pr 'Profile 1' Profile_1.copy
