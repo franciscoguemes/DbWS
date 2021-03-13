@@ -160,4 +160,5 @@ class ContextParser(JsonReader):
 
         template = Template(non_interpolated_value)
         interpolated_value = template.substitute(self.__interpolation_dict)
+        logger.debug(f"Interpolated: {non_interpolated_value} into: {interpolated_value}")
         return interpolated_value
