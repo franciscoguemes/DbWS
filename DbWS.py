@@ -3,6 +3,7 @@ import argparse
 import logging
 import logging.config
 import os
+from datetime import datetime
 import sys
 from json import JSONDecodeError
 from pathlib import Path
@@ -51,7 +52,7 @@ def main():
         # Parse logging configuration: DbWS --logging=/path/to/my/logging_file
         logging_file_path = Path(args.logging).absolute()
         check_file_exists(logging_file_path)
-        logging.config.fileConfig(logging_file_path)
+        logging.config.fileConfig(logging_file_path, defaults={'date': datetime.now().strftime('%Y%m%d_%H%M%S')})
         logger = logging.getLogger('DbWS')
 
         # Parse general configuration: DbWS --config=/path/to/my/config_file
