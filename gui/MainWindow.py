@@ -1,7 +1,10 @@
+import logging
 import tkinter
 from tkinter import Frame, Label, TOP, BOTTOM, CENTER, LEFT, Button
 
 from gui.WindowBuilder import WindowBuilder
+
+logger = logging.getLogger('DbWS')
 
 
 class MainWindow(Frame):
@@ -42,7 +45,7 @@ class MainWindow(Frame):
             for column in range(columns):
                 if counter < self.__builder.get_contexts_len():
                     button = self.__add_button(bottom_frame, row, column)
-                    counter+=1
+                    counter += 1
                 else:
                     break
         bottom_frame.pack()
@@ -51,12 +54,13 @@ class MainWindow(Frame):
 
         context = self.__builder.get_context(row, column)
 
-        button = Button(frame, text=context.get_name(), command=lambda: self.__switch_context(context))
+        button = Button(frame, text=context.get_name(), command=lambda: self.__switch_to_context(context))
         button.grid(row=row, column=column, pady=20, padx=20)
         return button
 
-    def __switch_context(self, context):
-        print(f"Executing context: \"{context.get_name()}\"")
+    def __switch_to_context(self, context):
+        # print(f"Executing context: \"{context.get_name()}\"")
+        logger.info(context.get_name())
         context.switch()
 
         # Close the window...

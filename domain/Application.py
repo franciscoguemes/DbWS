@@ -4,6 +4,7 @@ import subprocess
 
 logger = logging.getLogger('DbWS')
 
+
 class Application:
     """
     The Context class. This class represents a Context in the domain of the logic.
@@ -19,15 +20,15 @@ class Application:
         return self.__name
 
     def get_result_as_string(self):
-        logger.debug(f"Method application={self.__name}")
+        logger.debug(self.__name)
         full_command = self.get_full_command()
-        logger.debug(f"full_command: {full_command}")
+        logger.debug(full_command)
 
         application = subprocess.Popen(full_command, stdout=subprocess.PIPE)
         application.wait()
         result = application.communicate()[0]
-        logger.debug(f"result: {result}")
         result = result.decode("utf-8")
+        logger.debug(f"result: {result}")
         return result
         #
         # application = subprocess.run(full_command, stdout=subprocess.PIPE)
@@ -37,9 +38,9 @@ class Application:
         # return result
 
     def execute(self):
-        logger.debug(f"Method application={self.__name}")
+        logger.info(self.__name)
         full_command = self.get_full_command()
-        logger.debug(full_command)
+        logger.info(full_command)
         # list_files = subprocess.run(full_command)
         # print("The exit code was: %d" % list_files.returncode)
 
