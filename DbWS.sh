@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 DbWS_DIRECTORY=/home/francisco/git/Francisco/github/DbWS
 CONFIG_DIRECTORY=/home/francisco/.config/DbWS
