@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 import argparse
 import logging
 import logging.config
@@ -31,10 +31,13 @@ SCHEMA_ROOT_NAME = "DbWS_context_schema_"
 JSON_EXTENSION = ".json"
 SCHEMA_DIRECTORY = "schemas"
 
+# The directory of the script being run
+DbWS_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
+
 
 def get_schema_file(schema_version):
     schema_file_name = SCHEMA_ROOT_NAME + str(schema_version) + JSON_EXTENSION
-    schema_file = SCHEMA_DIRECTORY + os.path.sep + schema_file_name
+    schema_file = DbWS_DIRECTORY + os.path.sep + SCHEMA_DIRECTORY + os.path.sep + schema_file_name
     return schema_file
 
 
