@@ -47,8 +47,8 @@ smoothly from one context to another and focus on what really creates value for 
 
 ## What does DbWS in reality?
 This project is the basis for the DbWS (Develop by Wire System) which pretends to 
-automatize all routinary tasks that I personally carry out every day as a developer.
-Some of this tasks are:
+automatize all routine tasks that I personally carry out every day as a developer.
+Some of these tasks are:
 
 - Select the computer set up on startup. Choose whether you will be working in a:
 	- Company project
@@ -58,7 +58,7 @@ Some of this tasks are:
 Once the user has decided in which project is he/she going to work, then DbWS will
 do the following:
 
-- Based on the chosen context, DbWS will set up your environmnet for the chosen 
+- Based on the chosen context, DbWS will set up your environment for the chosen 
 task, this may include:
 	- Open browsers
 	- Start the IDE
@@ -66,7 +66,9 @@ task, this may include:
 	- Etc ...
 
 ## Installation
-You simply need to download the project to your local computer. 
+Clone this repository to your computer or simply download the project from GitHub to your local computer. After that
+run the script install.sh that is inside the project. This script will do all the job for you from installing needed
+packages in your OS to creating a Python virtual environment. Feel free to have a look at the script before execute it!
 
 ## Configuration
 In order to configure DbWS you will need to create a configuration file so please have a look 
@@ -76,7 +78,7 @@ Once you have created your configuration file, your next step will be to define 
 contexts you will be using. For this purpose, please have a look to the file 
 [CONTEXTS_FILE.md](https://github.com/franciscoguemes/DbWS/blob/master/CONTEXTS_FILE.md).
 
-Finally you will need to create a logging file to supply the logging configuration. See the 
+Finally, you will need to create a logging file to supply the logging configuration. See the 
 section [LOGGING_FILE.md](https://github.com/franciscoguemes/DbWS/blob/master/LOGGING_FILE.md)
 for this purpose.
 
