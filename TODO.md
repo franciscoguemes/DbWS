@@ -51,15 +51,17 @@
 
 
 #Application
-1. In the class Application line 70. Review the error case.
-1. Look at the console errors when selecting the option "Simple thingy".
-2. Improve the [logging](https://docs.python.org/3.6/howto/logging.html)
+1. Improve the error message when an environment variable in the contexts.json file can not be interpolated 
+   because it does not exist in the DbWS.config file. Handle this case gracefully.
+2. In the class Application line 70. Review the error case.
+3. Look at the console errors when selecting the option "Simple thingy".
+4. Improve the [logging](https://docs.python.org/3.6/howto/logging.html)
     4. Save context data with the errors in the logging file.
-3. Create test cases
+5. Create test cases
     1. Create a test case that includes a call to the method Context.transform_string_to_array_of_strings
-4. Once the user selects an option the application closes automatically
-5. The icon shows in the launcher the right icon
-6. Remove the limitation of contexts that the UI can handle (WindowBuilder.py)
+6. Once the user selects an option the application closes automatically
+7. The icon shows in the launcher the right icon
+8. Remove the limitation of contexts that the UI can handle (WindowBuilder.py)
 
 #Documentation
 
